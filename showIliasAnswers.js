@@ -1,3 +1,5 @@
+let marginStyle = "a";
+
 async function replaceAnswer(linkElement) {
     if (linkElement) {
         const answerLink = linkElement.getAttribute("data-answer-href");
@@ -10,9 +12,10 @@ async function replaceAnswer(linkElement) {
             const answerTd = respHtml.querySelector("div.ilc_qanswer_Answer");
 
             if (answerTd) {
-                linkElement.parentElement.style =
-                    "position: relative;left: -4em;"; // fix CSS ?!
-                linkElement.parentElement.textContent = answerTd.textContent;
+                const div = document.createElement("div");
+                div.style.marginRight = marginStyle;
+                div.textContent = answerTd.textContent;
+                linkElement.parentElement.replaceChild(div, linkElement);
             }
         } else {
             throw "Ilias error :/"; // best err handling!
@@ -39,15 +42,18 @@ function fixAnswersMain(e) {
 }
 
 // //fixAnswersMain();
-
-const bar = document.querySelector(".ilTableCommandRowTop > div:nth-child(2)");
-const tabActive = document.querySelector("#tab_manscoring.active");
-
-if (bar && tabActive) {
-    const btn = document.createElement("button");
-    btn.classList = ["btn", "btn-default"];
-    btn.textContent = "Show All Answers";
-    btn.style.marginRight = "16px";
-    btn.addEventListener("click", fixAnswersMain);
-    bar.prepend(btn);
-}
+checkSettings().then((margin) => {
+    marginStyle = `${margin}em`;
+    const bar = document.querySelector(
+        ".ilTableCommandRowTop > div:nth-child(2)"
+    );
+    const tabActive = document.querySelector("#tab_manscoring.active");
+    if (bar && tabActive) {
+        const btn = document.createElement("button");
+        btn.classList = ["btn", "btn-default"];
+        btn.textContent = "Show All Answers";
+        btn.style.marginRight = "16px";
+        btn.addEventListener("click", fixAnswersMain);
+        bar.prepend(btn);
+    }
+});
