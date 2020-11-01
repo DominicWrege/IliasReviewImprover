@@ -42,7 +42,7 @@ function fixAnswersMain(e) {
         if (promises.length > 0) {
             Promise.all(promises)
                 .then(() => {
-                    loadingDiv.textContent = "All answers are loaded.";
+                    loadingDiv.remove();
                     showAllAnswersBtn.remove();
                 })
                 .catch(console.error);
