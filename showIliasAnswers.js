@@ -1,6 +1,4 @@
-let marginStyle = "a";
-
-async function replaceAnswer(linkElement) {
+async function replaceAnswer(linkElement, margin) {
     if (linkElement) {
         const answerLink = linkElement.getAttribute("data-answer-href");
         const resp = await fetch(
@@ -13,7 +11,7 @@ async function replaceAnswer(linkElement) {
 
             if (answerTd) {
                 const div = document.createElement("div");
-                div.style.marginRight = marginStyle;
+                div.style.marginRight = margin;
                 div.textContent = answerTd.textContent;
                 linkElement.parentElement.replaceChild(div, linkElement);
             }
@@ -29,31 +27,27 @@ function fixAnswersMain(e) {
     let links = document.querySelectorAll(
         "td.std > a.il_ContainerItemCommand[data-answer-href]"
     );
-
-    let promises = [];
-    for (const a of links) {
-        promises.push(replaceAnswer(a));
-    }
-    if (promises.length > 0) {
-        Promise.all(promises)
-            .then(() => console.log("DONE!"))
-            .catch(console.error);
-    }
+    checkSettings().then((margin) => {
+        let promises = [];
+        const style = `${margin}em`;
+        for (const a of links) {
+            promises.push(replaceAnswer(a, style));
+        }
+        if (promises.length > 0) {
+            Promise.all(promises)
+                .then(() => console.log("DONE!"))
+                .catch(console.error);
+        }
+    });
 }
 
-// //fixAnswersMain();
-checkSettings().then((margin) => {
-    marginStyle = `${margin}em`;
-    const bar = document.querySelector(
-        ".ilTableCommandRowTop > div:nth-child(2)"
-    );
-    const tabActive = document.querySelector("#tab_manscoring.active");
-    if (bar && tabActive) {
-        const btn = document.createElement("button");
-        btn.classList = ["btn", "btn-default"];
-        btn.textContent = "Show All Answers";
-        btn.style.marginRight = "16px";
-        btn.addEventListener("click", fixAnswersMain);
-        bar.prepend(btn);
-    }
-});
+const bar = document.querySelector(".ilTableCommandRowTop > div:nth-child(2)");
+const tabActive = document.querySelector("#tab_manscoring.active");
+if (bar && tabActive) {
+    const btn = document.createElement("button");
+    btn.classList = ["btn", "btn-default"];
+    btn.textContent = "Show All Answers";
+    btn.style.marginRight = "16px";
+    btn.addEventListener("click", fixAnswersMain);
+    bar.prepend(btn);
+}
