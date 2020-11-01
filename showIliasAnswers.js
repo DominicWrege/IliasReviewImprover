@@ -24,6 +24,12 @@ async function replaceAnswer(linkElement, margin) {
 function fixAnswersMain(e) {
     e.preventDefault();
     e.stopPropagation();
+    const loadingDiv = document.querySelector("div#loadingText");
+    loadingDiv.style.display = "inline-block";
+    const showAllAnswersBtn = document.querySelector(
+        "button#ShowAllAnswersBtn"
+    );
+    showAllAnswersBtn.hidden = true;
     let links = document.querySelectorAll(
         "td.std > a.il_ContainerItemCommand[data-answer-href]"
     );
@@ -35,7 +41,10 @@ function fixAnswersMain(e) {
         }
         if (promises.length > 0) {
             Promise.all(promises)
-                .then(() => console.log("DONE!"))
+                .then(() => {
+                    loadingDiv.textContent = "All answers are loaded.";
+                    showAllAnswersBtn.remove();
+                })
                 .catch(console.error);
         }
     });
@@ -46,8 +55,15 @@ const tabActive = document.querySelector("#tab_manscoring.active");
 if (bar && tabActive) {
     const btn = document.createElement("button");
     btn.classList = ["btn", "btn-default"];
+    btn.id = "ShowAllAnswersBtn";
     btn.textContent = "Show All Answers";
     btn.style.marginRight = "16px";
     btn.addEventListener("click", fixAnswersMain);
+    const loading = document.createElement("div");
+
+    loading.style = "margin-right: 5em;display:none";
+    loading.id = "loadingText";
+    loading.textContent = "loading...";
+    bar.prepend(loading);
     bar.prepend(btn);
 }
