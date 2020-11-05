@@ -1,4 +1,4 @@
-async function replaceAnswer(linkElement) {
+async function replaceAnswer(linkElement, widthStyle) {
     if (linkElement) {
         const answerLink = linkElement.getAttribute("data-answer-href");
         const resp = await fetch(
@@ -11,8 +11,8 @@ async function replaceAnswer(linkElement) {
 
             if (answerTd) {
                 const div = document.createElement("div");
-                div.style.width = "36rem";
-                div.style.maxWidth = "400px";
+                div.style.width = widthStyle;
+                div.style.maxWidth = "460px";
                 div.textContent = answerTd.textContent;
                 linkElement.parentElement.replaceChild(div, linkElement);
             }
@@ -25,32 +25,37 @@ async function replaceAnswer(linkElement) {
 function fixAnswersMain(e) {
     e.preventDefault();
     e.stopPropagation();
-    let promises = [];
-    let links = document.querySelectorAll(
-        "td.std > a.il_ContainerItemCommand[data-answer-href]"
-    );
 
-    for (const a of links) {
-        promises.push(replaceAnswer(a));
-    }
-    if (promises.length > 0) {
-        const loadingDiv = document.querySelector("div#loadingText");
-        loadingDiv.style.display = "inline-block";
-        const showAllAnswersBtn = document.querySelector(
-            "button#ShowAllAnswersBtn"
+    const loadingDiv = document.querySelector("div#loadingText");
+    loadingDiv.style.display = "inline-block";
+    const showAllAnswersBtn = document.querySelector(
+        "button#ShowAllAnswersBtn"
+    );
+    showAllAnswersBtn.hidden = true;
+    checkSettings().then((width) => {
+        let promises = [];
+        const widthStyle = `${width}rem`;
+        let links = document.querySelectorAll(
+            "td.std > a.il_ContainerItemCommand[data-answer-href]"
         );
-        showAllAnswersBtn.hidden = true;
-        Promise.all(promises)
-            .then(() => {
-                loadingDiv.remove();
-                showAllAnswersBtn.remove();
-            })
-            .catch(console.error);
-    }
+        for (const a of links) {
+            promises.push(replaceAnswer(a, widthStyle));
+        }
+        if (promises.length > 0) {
+            showAllAnswersBtn.hidden = true;
+            Promise.all(promises)
+                .then(() => {
+                    loadingDiv.remove();
+                    showAllAnswersBtn.remove();
+                })
+                .catch(console.error);
+        }
+    });
 }
 
 const bar = document.querySelector(".ilTableCommandRowTop > div:nth-child(2)");
 const tabActive = document.querySelector("#tab_manscoring.active");
+
 if (bar && tabActive) {
     const btn = document.createElement("button");
     btn.classList = ["btn", "btn-default"];

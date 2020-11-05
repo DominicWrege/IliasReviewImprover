@@ -10,10 +10,10 @@
 	"content_scripts": [
 		{
 			"matches": ["https://www.ilias.fh-dortmund.de/ilias/ilias*"],
-			"js": ["showIliasAnswers.js"]
+			"js": ["common.js", "showIliasAnswers.js"]
 		}
 	],
-	"permissions": ["https://www.ilias.fh-dortmund.de/ilias/ilias*"],
+	"permissions": ["https://www.ilias.fh-dortmund.de/ilias/ilias*", "storage"],
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "dominic.wrege@fh-dortmund.de",
