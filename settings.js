@@ -1,14 +1,17 @@
 const slider = document.querySelector("#width-slider");
 const valueLabel = document.querySelector("#value-slider");
 
+const unit = "rem";
+
 checkSettings().then((width) => {
-    valueLabel.textContent = `${width}em`;
+    slider.value = width;
+    valueLabel.textContent = `${width}${unit}`;
 });
 
 slider.addEventListener("input", (e) => {
     e.preventDefault();
     const v = e.target.value;
-    valueLabel.textContent = `${v}rem`;
+    valueLabel.textContent = `${v}${unit}`;
     browser.storage.local.set({
         width: v,
     });
