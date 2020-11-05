@@ -1,4 +1,4 @@
-async function replaceAnswer(linkElement, margin) {
+async function replaceAnswer(linkElement) {
     if (linkElement) {
         const answerLink = linkElement.getAttribute("data-answer-href");
         const resp = await fetch(
@@ -11,7 +11,8 @@ async function replaceAnswer(linkElement, margin) {
 
             if (answerTd) {
                 const div = document.createElement("div");
-                div.style.marginRight = margin;
+                div.style.width = "36rem";
+                div.style.maxWidth = "400px";
                 div.textContent = answerTd.textContent;
                 linkElement.parentElement.replaceChild(div, linkElement);
             }
@@ -24,30 +25,28 @@ async function replaceAnswer(linkElement, margin) {
 function fixAnswersMain(e) {
     e.preventDefault();
     e.stopPropagation();
-    const loadingDiv = document.querySelector("div#loadingText");
-    loadingDiv.style.display = "inline-block";
-    const showAllAnswersBtn = document.querySelector(
-        "button#ShowAllAnswersBtn"
-    );
-    showAllAnswersBtn.hidden = true;
+    let promises = [];
     let links = document.querySelectorAll(
         "td.std > a.il_ContainerItemCommand[data-answer-href]"
     );
-    checkSettings().then((margin) => {
-        let promises = [];
-        const style = `${margin}em`;
-        for (const a of links) {
-            promises.push(replaceAnswer(a, style));
-        }
-        if (promises.length > 0) {
-            Promise.all(promises)
-                .then(() => {
-                    loadingDiv.remove();
-                    showAllAnswersBtn.remove();
-                })
-                .catch(console.error);
-        }
-    });
+
+    for (const a of links) {
+        promises.push(replaceAnswer(a));
+    }
+    if (promises.length > 0) {
+        const loadingDiv = document.querySelector("div#loadingText");
+        loadingDiv.style.display = "inline-block";
+        const showAllAnswersBtn = document.querySelector(
+            "button#ShowAllAnswersBtn"
+        );
+        showAllAnswersBtn.hidden = true;
+        Promise.all(promises)
+            .then(() => {
+                loadingDiv.remove();
+                showAllAnswersBtn.remove();
+            })
+            .catch(console.error);
+    }
 }
 
 const bar = document.querySelector(".ilTableCommandRowTop > div:nth-child(2)");
