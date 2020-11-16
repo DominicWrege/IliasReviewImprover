@@ -1,3 +1,5 @@
+let questionExtract = false;
+
 async function replaceAnswer(linkElement, widthStyle) {
     if (linkElement) {
         const answerLink = linkElement.getAttribute("data-answer-href");
@@ -7,8 +9,32 @@ async function replaceAnswer(linkElement, widthStyle) {
         if (resp.ok) {
             const txt = await resp.text();
             const respHtml = new DOMParser().parseFromString(txt, "text/html");
-            const answerTd = respHtml.querySelector("div.ilc_qanswer_Answer");
 
+            if (questionExtract === false) {
+                const question = respHtml.querySelector(
+                    ".ilc_qtitle_Title > p:nth-child(1)"
+                ).textContent;
+                const titleH3 = document.querySelector("h3.ilTableHeaderTitle");
+                const questionDiv = document.createElement("div");
+                questionDiv.textContent = question;
+                const br = document.createElement("br");
+                titleH3.appendChild(br);
+                titleH3.appendChild(questionDiv);
+
+                const assignmentNode = respHtml.querySelector(
+                    ".ilc_qtitle_Title > p:nth-child(2)"
+                );
+                if (assignmentNode) {
+                    const assignmentP = document.createElement("p");
+                    const b = document.createElement("b");
+                    const assignmentText = assignmentNode.textContent;
+                    b.textContent = assignmentText;
+                    assignmentP.appendChild(b);
+                    titleH3.parentElement.appendChild(assignmentP);
+                }
+                questionExtract = true;
+            }
+            const answerTd = respHtml.querySelector("div.ilc_qanswer_Answer");
             if (answerTd) {
                 const div = document.createElement("div");
                 div.style.width = widthStyle;
