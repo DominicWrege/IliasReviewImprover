@@ -11,27 +11,13 @@ async function replaceAnswer(linkElement, widthStyle) {
             const respHtml = new DOMParser().parseFromString(txt, "text/html");
 
             if (questionExtract === false) {
-                const question = respHtml.querySelector(
-                    ".ilc_qtitle_Title > p:nth-child(1)"
-                ).textContent;
-                const titleH3 = document.querySelector("h3.ilTableHeaderTitle");
-                const questionDiv = document.createElement("div");
-                questionDiv.textContent = question;
-                const br = document.createElement("br");
-                titleH3.appendChild(br);
-                titleH3.appendChild(questionDiv);
-
-                const assignmentNode = respHtml.querySelector(
-                    ".ilc_qtitle_Title > p:nth-child(2)"
+                const questionHtml = respHtml.querySelector(
+                    "div.ilc_qtitle_Title"
                 );
-                if (assignmentNode) {
-                    const assignmentP = document.createElement("p");
-                    const b = document.createElement("b");
-                    const assignmentText = assignmentNode.textContent;
-                    b.textContent = assignmentText;
-                    assignmentP.appendChild(b);
-                    titleH3.parentElement.appendChild(assignmentP);
-                }
+                const titleH3 = document.querySelector("h3.ilTableHeaderTitle");
+                questionHtml.style =
+                    "background-color: #fff;padding: 0.4em;margin: 0.5em 0 0.5em 0;";
+                titleH3.parentElement.appendChild(questionHtml);
                 questionExtract = true;
             }
             const answerTd = respHtml.querySelector("div.ilc_qanswer_Answer");
