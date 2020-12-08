@@ -1,4 +1,4 @@
-Improve ILIAS answer grading review process. Currently only works on the FH-Dortmund ILIAS E-Learning platform. It replaces the the answer links and replaces theme with the answer text.
+Improve ILIAS answer grading review process. Currently only works on the FH-Dortmund and the TH-Koeln ILIAS E-Learning platform. It replaces the the answer links and replaces theme with the answer text.
 
 [Download for Firefox](https://addons.mozilla.org/en-GB/firefox/addon/iliasreviewimprover/)
 
