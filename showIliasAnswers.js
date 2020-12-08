@@ -4,7 +4,7 @@ async function replaceAnswer(linkElement, widthStyle) {
     if (linkElement) {
         const answerLink = linkElement.getAttribute("data-answer-href");
         const resp = await fetch(
-            `https://www.ilias.fh-dortmund.de/ilias/${answerLink}`
+            `${this.window.location.origin}/ilias/${answerLink}`
         );
         if (resp.ok) {
             const txt = await resp.text();
@@ -40,9 +40,7 @@ function fixAnswersMain(e) {
 
     const loadingDiv = document.querySelector("div#loadingText");
     loadingDiv.style.display = "inline-block";
-    const showAllAnswersBtn = document.querySelector(
-        "button#ShowAllAnswersBtn"
-    );
+    const showAllAnswersBtn = document.querySelector("button#ImproveReview");
     showAllAnswersBtn.hidden = true;
     checkSettings().then((width) => {
         let promises = [];
@@ -71,8 +69,8 @@ const tabActive = document.querySelector("#tab_manscoring.active");
 if (bar && tabActive) {
     const btn = document.createElement("button");
     btn.classList = ["btn", "btn-default"];
-    btn.id = "ShowAllAnswersBtn";
-    btn.textContent = "Show All Answers";
+    btn.id = "ImproveReview";
+    btn.textContent = "Improve Review";
     btn.style.marginRight = "16px";
     btn.addEventListener("click", fixAnswersMain);
     const loading = document.createElement("div");
