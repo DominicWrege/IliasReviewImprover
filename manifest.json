@@ -1,26 +1,34 @@
 {
-	"manifest_version": 2,
-	"name": "Ilias Review Improver",
-	"version": "0.7.3",
-	"description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
-	"icons": {
-		"48": "icons/icon48.png",
-		"96": "icons/icon96.png"
-	},
-	"content_scripts": [
-		{
-			"matches": ["https://www.ilias.fh-dortmund.de/ilias/ilias*"],
-			"js": ["common.js", "showIliasAnswers.js"]
-		}
-	],
-	"options_ui": {
-		"page": "settings.html"
-	},
-	"permissions": ["https://www.ilias.fh-dortmund.de/ilias/ilias*", "storage"],
-	"browser_specific_settings": {
-		"gecko": {
-			"id": "dominic.wrege@fh-dortmund.de",
-			"strict_min_version": "68.0"
-		}
-	}
+    "manifest_version": 2,
+    "name": "Ilias Review Improver",
+    "version": "0.7.4",
+    "description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
+    "icons": {
+        "48": "icons/icon48.png",
+        "96": "icons/icon96.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.ilias.fh-dortmund.de/ilias/ilias*"
+            ],
+            "js": [
+                "common.js",
+                "showIliasAnswers.js"
+            ]
+        }
+    ],
+    "options_ui": {
+        "page": "settings.html"
+    },
+    "permissions": [
+        "https://www.ilias.fh-dortmund.de/ilias/ilias*",
+        "storage"
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "dominic.wrege@fh-dortmund.de",
+            "strict_min_version": "68.0"
+        }
+    }
 }
