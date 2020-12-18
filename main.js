@@ -55,6 +55,20 @@ async function replaceAnswerShowQuestion(linkElement, widthStyle) {
     }
 }
 
+
+/*
+
+   Explanation:
+
+    1. Get all the a elmenets who are just links to answers from the table
+    2. Extract the url from the a element 
+    3. Fetch the annswer
+    4. Parse the html from the response
+    4. Replace the a element with a div containing the fecthed answer
+    5. Do it only once: Insert the question into the title
+
+*/
+
 function fixAnswersMain(e) {
     e.preventDefault();
     e.stopPropagation();
