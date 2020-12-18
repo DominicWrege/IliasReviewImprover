@@ -1,35 +1,56 @@
-let questionExtract = false;
+async function downloadAnswer(linkElement) {
+    const link = linkElement.getAttribute("data-answer-href");
+    let response = await fetch(
+        `${this.window.location.origin}/ilias/${link}`
+    );
+    if (!response.ok) {
+        throw new Error("Error while download the answer")
+    }
+    return response.text();
+}
 
-async function replaceAnswer(linkElement, widthStyle) {
+function parseAnswer(text) {
+    const html = new DOMParser().parseFromString(text, "text/html");
+    return {
+        html: html,
+        anwserText: html.querySelector("div.ilc_qanswer_Answer").textContent
+    }
+}
+
+function createAnswerDiv(textContent, widthStyle) {
+    const div = document.createElement("div");
+    div.style.width = widthStyle;
+    div.style.maxWidth = "460px";
+    div.textContent = textContent
+    return div;
+}
+
+let questionIntoTitleInserted = false;
+function insertQuestionIntoTitle(html) {
+    const questionElement = html.querySelector(
+        "div.ilc_qtitle_Title"
+    );
+    questionElement.style =
+        "background-color: #fff;padding: 0.4em;margin: 0.5em 0 0.5em 0;";
+    const titleH3 = document.querySelector("h3.ilTableHeaderTitle");
+    titleH3.parentElement.appendChild(questionElement);
+    questionIntoTitleInserted = true;
+
+}
+
+async function replaceAnswerShowQuestion(linkElement, widthStyle) {
     if (linkElement) {
-        const answerLink = linkElement.getAttribute("data-answer-href");
-        const resp = await fetch(
-            `${this.window.location.origin}/ilias/${answerLink}`
-        );
-        if (resp.ok) {
-            const txt = await resp.text();
-            const respHtml = new DOMParser().parseFromString(txt, "text/html");
-
-            if (questionExtract === false) {
-                const questionHtml = respHtml.querySelector(
-                    "div.ilc_qtitle_Title"
-                );
-                const titleH3 = document.querySelector("h3.ilTableHeaderTitle");
-                questionHtml.style =
-                    "background-color: #fff;padding: 0.4em;margin: 0.5em 0 0.5em 0;";
-                titleH3.parentElement.appendChild(questionHtml);
-                questionExtract = true;
-            }
-            const answerTd = respHtml.querySelector("div.ilc_qanswer_Answer");
-            if (answerTd) {
-                const div = document.createElement("div");
-                div.style.width = widthStyle;
-                div.style.maxWidth = "460px";
-                div.textContent = answerTd.textContent;
-                linkElement.parentElement.replaceChild(div, linkElement);
-            }
+        const parsedResponse = parseAnswer(await downloadAnswer(linkElement));
+        if (parsedResponse.anwserText != null && parsedResponse.anwserText != undefined) {
+            linkElement.parentElement.replaceChild(
+                createAnswerDiv(parsedResponse.anwserText, widthStyle),
+                linkElement
+            );
         } else {
-            throw "Ilias error :/"; // best err handling!
+            throw "Ilias error :/";
+        }
+        if (!questionIntoTitleInserted) {
+            insertQuestionIntoTitle(parsedResponse.html);
         }
     }
 }
@@ -49,7 +70,7 @@ function fixAnswersMain(e) {
             "td.std > a.il_ContainerItemCommand[data-answer-href]"
         );
         for (const a of links) {
-            promises.push(replaceAnswer(a, widthStyle));
+            promises.push(replaceAnswerShowQuestion(a, widthStyle));
         }
         if (promises.length > 0) {
             showAllAnswersBtn.hidden = true;
