@@ -13,7 +13,7 @@
 				"https://www.ilias.fh-dortmund.de/ilias/ilias*",
 				"https://ilias.th-koeln.de/ilias/ilias*"
 			],
-			"js": ["common.js", "main.js"]
+			"js": ["settings.js", "main.js"]
 		}
 	],
 	"options_ui": {
