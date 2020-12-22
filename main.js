@@ -21,17 +21,16 @@ async function fixAnswers(e) {
     loadingDiv.style.display = "inline-block";
     const showAllAnswersBtn = document.querySelector("button#ImproveReview");
     showAllAnswersBtn.hidden = true;
-    const width = await checkSettings();
-    let promises = [];
-    const widthStyle = `${width}rem`;
+
+    const widthStyle = `${await checkSettings()}rem`;
     let links = document.querySelectorAll(
         "td.std > a.il_ContainerItemCommand[data-answer-href]"
     );
+    let promises = [];
     for (const a of links) {
         promises.push(replaceAnswerShowQuestion(a, widthStyle));
     }
     if (promises.length > 0) {
-        showAllAnswersBtn.hidden = true;
         Promise.all(promises)
             .then(() => {
                 loadingDiv.parentElement.prepend(checkBoxFont());
