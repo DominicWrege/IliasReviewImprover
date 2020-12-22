@@ -13,16 +13,18 @@
 let questionIntoTitleInserted = false;
 main();
 
-async function fixAnswers(e) {
-    e.preventDefault();
-    e.stopPropagation();
+async function handlerFixAnswers(event) {
+    event.preventDefault();
+    event.stopPropagation();
 
     const loadingDiv = document.querySelector("div#loadingText");
     loadingDiv.style.display = "inline-block";
     const showAllAnswersBtn = document.querySelector("button#ImproveReview");
     showAllAnswersBtn.hidden = true;
+    await fixAllAnswers(`${await checkSettings()}rem`);
+}
 
-    const widthStyle = `${await checkSettings()}rem`;
+async function fixAllAnswers(widthStyle) {
     let links = document.querySelectorAll(
         "td.std > a.il_ContainerItemCommand[data-answer-href]"
     );
@@ -31,13 +33,14 @@ async function fixAnswers(e) {
         promises.push(replaceAnswerShowQuestion(a, widthStyle));
     }
     if (promises.length > 0) {
-        Promise.all(promises)
-            .then(() => {
-                loadingDiv.parentElement.prepend(checkBoxFont());
-                loadingDiv.remove();
-                showAllAnswersBtn.remove();
-            })
-            .catch(console.error);
+        try {
+            await Promise.all(promises);
+        } catch (err) {
+            console.error(err);
+        }
+        loadingDiv.parentElement.prepend(checkBoxFont());
+        loadingDiv.remove();
+        showAllAnswersBtn.remove();
     }
 }
 
@@ -66,7 +69,7 @@ function fixButton() {
     btn.id = "ImproveReview";
     btn.textContent = "Improve Review";
     btn.style.marginRight = "16px";
-    btn.addEventListener("click", fixAnswers);
+    btn.addEventListener("click", handlerFixAnswers);
     return btn;
 }
 
