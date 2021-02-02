@@ -32,12 +32,14 @@ async function fixAllAnswers(widthStyle) {
     for (const a of links) {
         promises.push(replaceAnswerShowQuestion(a, widthStyle));
     }
+
     if (promises.length > 0) {
         try {
             await Promise.all(promises);
         } catch (err) {
             console.error(err);
         }
+        const loadingDiv = document.querySelector("div#loadingText");
         loadingDiv.parentElement.prepend(checkBoxFont());
         loadingDiv.remove();
         showAllAnswersBtn.remove();
@@ -131,7 +133,6 @@ async function replaceAnswerShowQuestion(linkElement, widthStyle) {
         if (parsedResponse.anwser) {
             linkElement.parentElement.replaceChild(
                 createAnswerDiv(parsedResponse.anwser, widthStyle),
-                //parsedResponse.anwser,
                 linkElement
             );
         } else {
