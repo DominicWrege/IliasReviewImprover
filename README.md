@@ -6,7 +6,7 @@ Improve ILIAS answer grading review process. Currently only works on the FH-Dort
 Functions:
 
 -   Inserts all answers into the table
--   Exports all rows as archive (ZIP) or JSON
+-   Exports all the rows as archive (ZIP) or JSON file.
 
 Tools
 
