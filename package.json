@@ -12,6 +12,7 @@
     "web-ext": "6.1.0"
   },
   "scripts": {
-    "start": "web-ext run --start-url https://www.ilias.fh-dortmund.de/ilias/"
+    "start": "web-ext run --start-url https://www.ilias.fh-dortmund.de/ilias/",
+    "build": "web-ext build"
   }
 }
