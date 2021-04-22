@@ -19,9 +19,7 @@ async function handlerFixAnswers(event) {
 
     const loadingDiv = document.querySelector("div#loadingText");
     loadingDiv.style.display = "inline-block";
-    const showAllAnswersBtn = document
-        .querySelector("input#ImproveReview")
-        .remove();
+    document.querySelector("input#ImproveReview").remove();
     await fixAllAnswers(`${await checkSettings()}rem`);
 }
 
