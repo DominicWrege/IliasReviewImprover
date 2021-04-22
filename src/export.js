@@ -1,46 +1,41 @@
-console.log("1234");
-//test();
-function test() {
-    // eslint-disable-next-line no-undef
-    // var zip = new JSZip();
-    // zip.file("Hello.txt", "Hello World\n");
-    // zip.file("Hello222222.txt", "Hello\n");
-    // var img = zip.folder("images");
-    // console.log(img);
-    // zip.generateAsync({ type: "blob" }).then((content) => {
-    //     // see FileSaver.js
-    //     console.log("s");
-    //     console.log(content);
-    //     //    download(content, "test.zip");
-    // });
-    exportHandler().then(console.lo^0g);
-    console.log(getAssignmentName);
-}
-
 function getAssignmentName() {
     const select = document.querySelector(
         "div.ilTableFilterInput select#question"
     );
     const options = select.options;
-    return options[select.selectedIndex].firstChild.textContent.replace(
-        /\s/g,
-        ""
-    );
+    return options[select.selectedIndex].firstChild.textContent
+        .replace(/\s/g, "")
+        .split("(")[0];
 }
 
-async function exportArchiveHandler(){
-    let rows = await downloadRowData();
-    const zip = new JSZip();
-    for(const row of rows){
-       zip.file(`${row.username}.txt`, row.answerText);
+async function exportArchiveHandler(event) {
+    event.preventDefault();
+    try {
+        const rows = await downloadRowData();
+        const zip = new JSZip();
+        for (const row of rows) {
+            zip.file(`${row.username}.txt`, row.answerText);
+        }
+        console.log(rows);
+        const zipContent = await zip.generateAsync({ type: "blob" });
+        createFile(zipContent, `${getAssignmentName()}.zip`);
+    } catch (err) {
+        console.error(err);
     }
-    const zipContent = await zip.generateAsync({ type: "blob" });
-    createFile(zipContent, `${getAssignmentName()}.zip`);
 }
 
-async function exportHandler() {
-    let rows = await downloadRowData();
-    createFile(JSON.stringify(rows), "test.json", (type = "application/json"));
+async function exportJSONHandler(event) {
+    event.preventDefault();
+    try {
+        const rows = await downloadRowData();
+        createFile(
+            JSON.stringify(rows),
+            `${getAssignmentName()}.json`,
+            "application/json"
+        );
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 async function downloadRowData() {
@@ -57,7 +52,7 @@ async function downloadRowData() {
 
 function getDataFromRows() {
     let data = [];
-    for (let tr of document.querySelectorAll("tr.tblrow1,tr.tblrow2")) {
+    for (const tr of document.querySelectorAll("tr.tblrow1,tr.tblrow2")) {
         data.push({
             lastname: tr.children[0].textContent,
             firstname: tr.children[1].textContent,
@@ -94,7 +89,8 @@ function setupExportButtons() {
     );
     const jsonButton = createBlueButton("Export to JSON");
     const archiveButton = createBlueButton("Export to archive");
-    jsonButton.addEventListener("click", exportHandler);
+    jsonButton.addEventListener("click", exportJSONHandler);
     archiveButton.addEventListener("click", exportArchiveHandler);
+    span.append(archiveButton);
     span.append(jsonButton);
 }
