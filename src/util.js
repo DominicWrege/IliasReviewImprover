@@ -23,3 +23,10 @@ function createBlueButton(text) {
     button.style.marginLeft = "0.35em";
     return button;
 }
+async function checkSettings() {
+    const obj = await browser.storage.local.get("width");
+    if (!obj["width"]) {
+        return 36;
+    }
+    return obj.width;
+}

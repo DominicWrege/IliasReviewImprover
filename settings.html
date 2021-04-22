@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Settings</title>
-    </head>
 
-    <style>
-        body {
-            font-size: 1.3em;
-        }
-        main {
-            width: 75%;
-            display: flex;
-            align-items: self-end;
-        }
-        #width-slider {
-            min-width: 220px;
-            margin-left: 1.5em;
-            margin-right: 1.5em;
-        }
-    </style>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings</title>
+</head>
 
-    <body>
-        <h2>Settings</h2>
-        <main>
-            <label for="width-slider">Text Width:</label>
-            <input
-                type="range"
-                id="width-slider"
-                name="width-setting"
-                min="30"
-                max="50"
-                step="1"
-            />
-            <div id="value-slider"></div>
-        </main>
-    </body>
-    <script src="common.js"></script>
-    <script src="settings.js"></script>
+<style>
+    body {
+        font-size: 1.3em;
+    }
+
+    main {
+        width: 75%;
+        display: flex;
+        align-items: self-end;
+    }
+
+    #width-slider {
+        min-width: 220px;
+        margin-left: 1.5em;
+        margin-right: 1.5em;
+    }
+</style>
+
+<body>
+    <h2>Settings</h2>
+    <main>
+        <label for="width-slider">Text Width:</label>
+        <input type="range" id="width-slider" name="width-setting" min="30" max="50" step="1" />
+        <div id="value-slider"></div>
+    </main>
+</body>
+<script src="./src/util.js"></script>
+<script src="./src/settings.js"></script>
+
 </html>
