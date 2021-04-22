@@ -19,8 +19,9 @@ async function handlerFixAnswers(event) {
 
     const loadingDiv = document.querySelector("div#loadingText");
     loadingDiv.style.display = "inline-block";
-    const showAllAnswersBtn = document.querySelector("button#ImproveReview");
-    showAllAnswersBtn.hidden = true;
+    const showAllAnswersBtn = document
+        .querySelector("input#ImproveReview")
+        .remove();
     await fixAllAnswers(`${await checkSettings()}rem`);
 }
 
@@ -42,7 +43,6 @@ async function fixAllAnswers(widthStyle) {
         const loadingDiv = document.querySelector("div#loadingText");
         loadingDiv.parentElement.prepend(checkBoxFont());
         loadingDiv.remove();
-        showAllAnswersBtn.remove();
     }
 }
 
@@ -55,13 +55,10 @@ function loadingText() {
 }
 
 function fixButton() {
-    const btn = document.createElement("button");
-    btn.classList = ["btn", "btn-default"];
-    btn.id = "ImproveReview";
-    btn.textContent = "Improve Review";
-    btn.style.marginRight = "16px";
-    btn.addEventListener("click", handlerFixAnswers);
-    return btn;
+    const button = createBlueButton("Display answers");
+    button.id = "ImproveReview";
+    button.addEventListener("click", handlerFixAnswers);
+    return button;
 }
 
 function toogleFont(event) {
