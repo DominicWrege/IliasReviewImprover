@@ -1,15 +1,15 @@
 /*
 
-   Explanation:
-
+    What is the "improve button doing"?
+    
     1. Get all the a elmenets who are just links to the answers from the table
     2. Extract the url from the a element 
     3. Fetch the annswer
     4. Parse the html from the response
     4. Replace the a element with a div containing the fecthed answer
     5. Do it only once: Insert the question into the title
-
 */
+
 let questionIntoTitleInserted = false;
 main();
 
@@ -46,17 +46,6 @@ async function fixAllAnswers(widthStyle) {
     }
 }
 
-function main() {
-    const bar = document.querySelector(
-        ".ilTableCommandRowTop > div:nth-child(2)"
-    );
-    const tabActive = document.querySelector("#tab_manscoring.active");
-    if (bar && tabActive) {
-        bar.prepend(fixButton());
-        bar.prepend(loadingText());
-    }
-}
-
 function loadingText() {
     const loading = document.createElement("div");
     loading.style = "margin-right: 5em;display:none";
@@ -87,23 +76,6 @@ function toogleFont(event) {
         } else {
             element.style.fontFamily = "";
         }
-}
-
-async function downloadAnswer(linkElement) {
-    const link = linkElement.getAttribute("data-answer-href");
-    let response = await fetch(`${this.window.location.origin}/ilias/${link}`);
-    if (!response.ok) {
-        throw new Error("Error while download the answer");
-    }
-    return response.text();
-}
-
-function parseAnswer(text) {
-    const html = new DOMParser().parseFromString(text, "text/html");
-    return {
-        html: html,
-        anwser: html.querySelector("div.ilc_qanswer_Answer"),
-    };
 }
 
 function createAnswerDiv(anwser, widthStyle) {
@@ -160,4 +132,15 @@ function checkBoxFont() {
     wrapper.appendChild(input);
     wrapper.appendChild(label);
     return wrapper;
+}
+function main() {
+    const bar = document.querySelector(
+        ".ilTableCommandRowTop > div:nth-child(2)"
+    );
+    const tabActive = document.querySelector("#tab_manscoring.active");
+    if (bar && tabActive) {
+        setupExportButtons();
+        bar.prepend(fixButton());
+        bar.prepend(loadingText());
+    }
 }

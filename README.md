@@ -2,6 +2,11 @@ Improve ILIAS answer grading review process. Currently only works on the FH-Dort
 
 [Download for Firefox](https://addons.mozilla.org/en-GB/firefox/addon/iliasreviewimprover/)
 
+Functions:
+
+-   Inserts all answers into the table
+-   Exports all rows as archive (ZIP) or JSON
+
 Tools
 
 -   [web-ext](https://github.com/mozilla/web-ext)
