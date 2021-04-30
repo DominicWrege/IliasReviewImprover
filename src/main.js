@@ -133,10 +133,8 @@ function main() {
         ".ilTableCommandRowTop > div:nth-child(2)"
     );
     const tabActive = document.querySelector("#tab_manscoring.active");
-    const mainTable = document.querySelector(
-        "#man_scor_by_qst_1287429 > tbody:nth-child(3)"
-    );
-    if (bar && tabActive && mainTable) {
+    const mainTable = document.querySelector("tbody>tr>td.ilCenter");
+    if (bar && tabActive && !mainTable) {
         setupExportButtons();
         bar.prepend(fixButton());
         bar.prepend(loadingText());
