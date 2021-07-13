@@ -53,7 +53,7 @@ function loadingText() {
 }
 
 function fixButton() {
-    const button = createBlueButton("Display answers");
+    const button = createBlueButton("Show Answers");
     button.id = "ImproveReview";
     button.addEventListener("click", handlerFixAnswers);
     return button;
