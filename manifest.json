@@ -10,6 +10,7 @@
     "content_scripts": [
         {
             "matches": [
+                "https://openbook.fh-dortmund.de/ilias*",
                 "https://www.ilias.fh-dortmund.de/ilias/ilias*",
                 "https://ilias.th-koeln.de/ilias/ilias*"
             ],
