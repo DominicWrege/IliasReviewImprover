@@ -59,7 +59,7 @@ function getDataFromRows() {
             lastName: tr.children[0]?.textContent ?? "",
             firstName: tr.children[1]?.textContent ?? "",
             username: tr.children[2]?.textContent ?? "", 
-            points: parseInt(tr.children[3]?.querySelector("div.form-inline > input").value ?? 0),
+            points: parseFloat(tr.children[3]?.querySelector("div.form-inline > input").value ?? 0),
             answerLink: tr.children[4]?.firstElementChild ?? "",
         });
     }
