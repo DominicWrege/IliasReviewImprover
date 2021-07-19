@@ -25,5 +25,5 @@ async function checkSettings() {
             return obj.width;
         }
     }
-    return 38;
+    return 40;
 }

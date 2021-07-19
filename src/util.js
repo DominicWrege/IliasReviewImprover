@@ -8,7 +8,6 @@ function parseAnswer(text) {
 async function downloadAnswer(linkElement) {
 
     const link = linkElement.getAttribute("data-answer-href");
-    console.log("link", link);
 
     let answerUrl = "";
     const origin = this.window.location.origin;

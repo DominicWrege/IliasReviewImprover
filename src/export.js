@@ -28,6 +28,7 @@ async function exportJSONHandler(event) {
     event.preventDefault();
     try {
         const rows = await downloadRowData();
+        console.log(`${getAssignmentName()}.json`);
         createFile(
             JSON.stringify(rows),
             `${getAssignmentName()}.json`,
@@ -53,11 +54,14 @@ async function downloadRowData() {
 function getDataFromRows() {
     let data = [];
     for (const tr of document.querySelectorAll("tr.tblrow1,tr.tblrow2")) {
+        console.log();
+
         data.push({
-            lastname: tr.children[0].textContent,
-            firstname: tr.children[1].textContent,
-            username: tr.children[2].textContent,
-            answerLink: tr.children[4].firstElementChild,
+            lastName: tr.children[0]?.textContent ?? "",
+            firstName: tr.children[1]?.textContent ?? "",
+            username: tr.children[2]?.textContent ?? "", 
+            points: parseInt(tr.children[3]?.querySelector("div.form-inline > input").value ?? 0),
+            answerLink: tr.children[4]?.firstElementChild ?? "",
         });
     }
     return data;
