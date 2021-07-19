@@ -28,10 +28,9 @@ async function exportJSONHandler(event) {
     event.preventDefault();
     try {
         const rows = await downloadRowData();
-        console.log(`${getAssignmentName()}.json`);
         createFile(
             JSON.stringify(rows),
-            `${getAssignmentName()}.json`,
+            `${getAssignmentName() ?? ilias_export}.json`,
             "application/json"
         );
     } catch (err) {
