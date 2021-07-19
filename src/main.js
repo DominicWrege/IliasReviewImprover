@@ -119,7 +119,7 @@ function checkBoxFont() {
     input.type = "checkbox";
     input.id = "font-style";
     input.name = "font";
-    input.addEventListener("click", toogleFont);
+    input.addEventListener("click", toggleFont);
     const label = document.createElement("label");
     label.for = "font-sytle";
     label.style.paddingLeft = "1em";
