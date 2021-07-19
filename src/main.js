@@ -79,7 +79,7 @@ function createAnswerDiv(anwser, widthStyle) {
     div.style.padding = 0;
     div.style.background = "#FFF !important";
     anwser.style.border = "none";
-    div.style.maxWidth = "500px";
+    // div.style.maxWidth = "700px !important";
     anwser.style.color = "black";
     div.appendChild(anwser);
     return div;
