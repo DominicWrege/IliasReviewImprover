@@ -6,10 +6,22 @@ function parseAnswer(text) {
     };
 }
 async function downloadAnswer(linkElement) {
+
     const link = linkElement.getAttribute("data-answer-href");
-    let response = await fetch(`${this.window.location.origin}/ilias/${link}`);
+    console.log("link", link);
+
+    let answerUrl = "";
+    const origin = this.window.location.origin;
+    // check if instance is ilias or openbook
+    if (origin.includes("openbook.")){
+        answerUrl = `${origin}/${link}`;
+    }else{ //ilias
+        answerUrl = `${origin}/ilias/${link}`;
+    }
+    let response = await fetch(`${answerUrl}`);
+
     if (!response.ok) {
-        throw new Error("Error while download the answer");
+        throw new Error($`Util.js: Error while download the answer : answerUrl = ${answerUrl}`);
     }
     return response.text();
 }

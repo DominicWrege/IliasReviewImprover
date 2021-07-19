@@ -1,6 +1,6 @@
 {
   "name": "ilias-review-improver",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple Ilias Review Improver",
   "main": "main.js",
   "author": "Dominic Wrege",
@@ -9,10 +9,11 @@
     "jszip": "^3.6.0"
   },
   "devDependencies": {
-    "web-ext": "6.1.0"
+    "web-ext": "6.2.0"
   },
   "scripts": {
-    "start": "web-ext run --start-url https://www.ilias.fh-dortmund.de/ilias/",
+    "start:url": "web-ext run --start-url https://www.ilias.fh-dortmund.de/ilias/",
+    "start": "web-ext run",
     "build": "web-ext build"
   }
 }
