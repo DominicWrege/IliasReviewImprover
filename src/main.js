@@ -59,7 +59,7 @@ function fixButton() {
     return button;
 }
 
-function toogleFont(event) {
+function toggleFont(event) {
     const checkbox = event.target;
     const answers = document.querySelectorAll(
         "td.std div div.ilc_qanswer_Answer.solutionbox"
