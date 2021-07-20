@@ -9,6 +9,8 @@ function getAssignmentName() {
 }
 
 async function exportArchiveHandler(event) {
+    const oldValue = event.target.value.slice();
+    event.target.value = "loading..."
     event.preventDefault();
     try {
         const rows = await downloadRowData();
@@ -20,11 +22,16 @@ async function exportArchiveHandler(event) {
         createFile(zipContent, `${getAssignmentName()}.zip`);
     } catch (err) {
         console.error(err);
+    }finally{
+        event.target.value = oldValue;
     }
 }
 
 async function exportJSONHandler(event) {
     event.preventDefault();
+    const oldValue = event.target.value.slice();
+    event.target.value = "loading..."
+
     try {
         const rows = await downloadRowData();
         createFile(
@@ -34,6 +41,8 @@ async function exportJSONHandler(event) {
         );
     } catch (err) {
         console.error(err);
+    }finally{
+        event.target.value = oldValue;
     }
 }
 
@@ -44,7 +53,7 @@ async function downloadRowData() {
         delete row.answerLink;
         return {
             ...row, // util.js
-            answerText: parseAnswer(answerData).answers.textContent,
+            answerText: parseAnswer(answerData).answer?.textContent,
         };
     });
     return await Promise.all(data);
