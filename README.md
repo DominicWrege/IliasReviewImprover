@@ -15,11 +15,15 @@ Tools
 ### build
 
 ```
-web-ext build
+npm run build
 ```
 
 ### run
 
 ```
-web-ext run
+npm run start
+```
+or
+```
+npm run start:url
 ```
