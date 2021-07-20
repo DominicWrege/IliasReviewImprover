@@ -16,7 +16,6 @@ async function exportArchiveHandler(event) {
         for (const row of rows) {
             zip.file(`${row.username}.txt`, row.answerText);
         }
-        console.log(rows);
         const zipContent = await zip.generateAsync({ type: "blob" });
         createFile(zipContent, `${getAssignmentName()}.zip`);
     } catch (err) {
@@ -44,7 +43,7 @@ async function downloadRowData() {
         delete row.answerLink;
         return {
             ...row,
-            answerText: parseAnswer(answerData).anwser.textContent,
+            answerText: parseAnswer(answerData).answers.textContent,
         };
     });
     return await Promise.all(data);
@@ -53,12 +52,10 @@ async function downloadRowData() {
 function getDataFromRows() {
     let data = [];
     for (const tr of document.querySelectorAll("tr.tblrow1,tr.tblrow2")) {
-        console.log();
-
         data.push({
             lastName: tr.children[0]?.textContent ?? "",
             firstName: tr.children[1]?.textContent ?? "",
-            username: tr.children[2]?.textContent ?? "", 
+            username: tr.children[2]?.textContent ?? "",
             points: parseFloat(tr.children[3]?.querySelector("div.form-inline > input").value ?? 0),
             answerLink: tr.children[4]?.firstElementChild ?? "",
         });

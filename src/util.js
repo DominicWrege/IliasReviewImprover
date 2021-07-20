@@ -2,7 +2,7 @@ function parseAnswer(text) {
     const html = new DOMParser().parseFromString(text, "text/html");
     return {
         html: html,
-        anwser: html.querySelector("div.ilc_qanswer_Answer"),
+        answers: html.querySelector("div.ilc_qanswer_Answer"),
     };
 }
 async function downloadAnswer(linkElement) {
