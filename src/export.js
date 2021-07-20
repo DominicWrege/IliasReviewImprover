@@ -10,7 +10,7 @@ function getAssignmentName() {
 
 async function exportArchiveHandler(event) {
     const oldValue = event.target.value.slice();
-    event.target.value = "loading..."
+    event.target.value = "loading...";
     event.preventDefault();
     try {
         const rows = await downloadRowData();
@@ -30,7 +30,7 @@ async function exportArchiveHandler(event) {
 async function exportJSONHandler(event) {
     event.preventDefault();
     const oldValue = event.target.value.slice();
-    event.target.value = "loading..."
+    event.target.value = "loading...";
 
     try {
         const rows = await downloadRowData();
