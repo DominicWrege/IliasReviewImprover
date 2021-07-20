@@ -20,7 +20,7 @@ Tools
 npm run build
 ```
 
-After that you can find you extensions in the build directory.
+After that you can find the ready extensions in the build directory.
 
 ### run
 
