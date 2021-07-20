@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Ilias Review Improver",
-    "version": "0.9.8",
+    "version": "0.9.9",
     "description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
     "icons": {
         "48": "icons/icon48.png",
@@ -15,10 +15,10 @@
                 "https://ilias.th-koeln.de/ilias/ilias*"
             ],
             "js": [
-                "src/settings.js",
-                "src/util.js",
-                "src/export.js",
-                "src/main.js",
+                "settings.js",
+                "util.js",
+                "export.js",
+                "main.js",
                 "lib/jszip.min.js"
             ]
         }
