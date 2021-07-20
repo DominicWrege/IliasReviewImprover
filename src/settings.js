@@ -19,7 +19,7 @@ if (slider && valueLabel) {
 }
 
 async function checkSettings() {
-    if (typeof browser !== "undefined" && browser != null) {
+    if (typeof browser !== "undefined" && browser !== null) {
         const obj = await browser.storage.local.get("width");
         if (obj["width"]) {
             return obj.width;

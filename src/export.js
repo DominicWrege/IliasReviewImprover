@@ -39,10 +39,11 @@ async function exportJSONHandler(event) {
 
 async function downloadRowData() {
     const data = getDataFromRows().map(async (row) => {
+        // util.js
         const answerData = await downloadAnswer(row.answerLink);
         delete row.answerLink;
         return {
-            ...row,
+            ...row, // util.js
             answerText: parseAnswer(answerData).answers.textContent,
         };
     });
@@ -87,7 +88,9 @@ function setupExportButtons() {
     const span = document.querySelector(
         "fieldset.ilTableFilter > span:nth-child(3)"
     );
+    // util.js
     const jsonButton = createBlueButton("Export to JSON");
+    // util.js
     const archiveButton = createBlueButton("Export to archive");
     jsonButton.addEventListener("click", exportJSONHandler);
     archiveButton.addEventListener("click", exportArchiveHandler);

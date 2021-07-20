@@ -2,9 +2,10 @@ function parseAnswer(text) {
     const html = new DOMParser().parseFromString(text, "text/html");
     return {
         html: html,
-        answers: html.querySelector("div.ilc_qanswer_Answer"),
+        answer: html.querySelector("div.ilc_qanswer_Answer"),
     };
 }
+
 async function downloadAnswer(linkElement) {
 
     const link = linkElement.getAttribute("data-answer-href");
@@ -33,11 +34,4 @@ function createBlueButton(text) {
     button.value = text;
     button.style.marginLeft = "0.35em";
     return button;
-}
-async function checkSettings() {
-    const obj = await browser.storage.local.get("width");
-    if (!obj["width"]) {
-        return 36;
-    }
-    return obj.width;
 }

@@ -20,6 +20,7 @@ async function handlerFixAnswers(event) {
     const loadingDiv = document.querySelector("div#loadingText");
     loadingDiv.style.display = "inline-block";
     document.querySelector("input#ImproveReview").remove();
+    // settings.js
     await fixAllAnswers(`${await checkSettings()}rem`);
 }
 
@@ -36,7 +37,7 @@ async function fixAllAnswers(widthStyle) {
         try {
             await Promise.all(promises);
         } catch (err) {
-            console.error(err);
+            console.error("error:", err);
         }
         const loadingDiv = document.querySelector("div#loadingText");
         loadingDiv.parentElement.prepend(checkBoxFont());
@@ -53,6 +54,7 @@ function loadingText() {
 }
 
 function fixButton() {
+    // util.js
     const button = createBlueButton("Show Answers");
     button.id = "ImproveReview";
     button.addEventListener("click", handlerFixAnswers);
@@ -73,15 +75,15 @@ function toggleFont(event) {
         }
 }
 
-function createAnswerDiv(anwser, widthStyle) {
+function createAnswerDiv(answer, widthStyle) {
     const div = document.createElement("div");
     div.style.width = widthStyle;
     div.style.padding = 0;
     div.style.background = "#FFF !important";
-    anwser.style.border = "none";
+    answer.style.border = "none";
     // div.style.maxWidth = "700px !important";
-    anwser.style.color = "black";
-    div.appendChild(anwser);
+    answer.style.color = "black";
+    div.appendChild(answer);
     return div;
 }
 
@@ -96,10 +98,11 @@ function insertQuestionIntoTitle(html) {
 
 async function replaceAnswerShowQuestion(linkElement, widthStyle) {
     if (linkElement) {
+        // util.js
         const parsedResponse = parseAnswer(await downloadAnswer(linkElement));
-        if (parsedResponse.anwser) {
+        if (parsedResponse?.answer) {
             linkElement.parentElement.replaceChild(
-                createAnswerDiv(parsedResponse.anwser, widthStyle),
+                createAnswerDiv(parsedResponse.answer, widthStyle),
                 linkElement
             );
         } else {
