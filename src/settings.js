@@ -21,25 +21,14 @@ function saveWidthSettings(width) {
 	if (!width) {
 		return;
 	}
-	if (isChrome) {
-		chrome.storage.local.set({ width });
-	} else {
-		browser.storage.local.set({ width });
-	}
-}
-
-function isChrome() {
-	return chrome?.storage !== undefined && chrome?.storage !== null;
+	chrome?.storage.local.set({ width });
 }
 
 async function loadSettings() {
 	const defaultWidth = 40;
-	if (isChrome) {
-		return new Promise((resolve, _reject) => {
-			chrome.storage.local.get(["width"], (result) => {
-				resolve(result.width ?? defaultWidth);
-			});
+	return new Promise((resolve, _reject) => {
+		chrome?.storage.local.get(["width"], (result) => {
+			resolve(result.width ?? defaultWidth);
 		});
-	}
-	return (await browser.storage.local.get("width")) ?? defaultWidth;
+	});
 }
