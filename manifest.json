@@ -1,11 +1,12 @@
 {
     "manifest_version": 2,
     "name": "Ilias Review Improver",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
     "icons": {
+        "32": "icons/icon32.png",
         "48": "icons/icon48.png",
-        "96": "icons/icon96.png"
+        "128": "icons/icon128.png"
     },
     "content_scripts": [
         {
@@ -15,26 +16,21 @@
                 "https://ilias.th-koeln.de/ilias/ilias*"
             ],
             "js": [
-                "settings.js",
-                "util.js",
-                "export.js",
-                "main.js",
+                "src/settings.js",
+                "src/util.js",
+                "src/export.js",
+                "src/main.js",
                 "lib/jszip.min.js"
             ]
         }
     ],
     "options_ui": {
-        "page": "settings.html"
+        "page": "settings.html",
+        "open_in_tab": false
     },
     "permissions": [
         "https://www.ilias.fh-dortmund.de/ilias/*",
         "https://ilias.th-koeln.de/ilias/*",
         "storage"
-    ],
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "dominic.wrege@fh-dortmund.de",
-            "strict_min_version": "68.0"
-        }
-    }
+    ]
 }

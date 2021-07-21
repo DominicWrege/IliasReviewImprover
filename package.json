@@ -19,7 +19,6 @@
 		"docs": "web-ext doc"
 	},
 	"webExt": {
-		"sourceDir": "src",
 		"artifactsDir": "build"
 	}
 }
