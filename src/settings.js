@@ -24,7 +24,7 @@ function saveWidthSettings(width) {
 	if (isChrome) {
 		chrome.storage.local.set({ width });
 	} else {
-		browser.storage.local.set({ width: width });
+		browser.storage.local.set({ width });
 	}
 }
 
