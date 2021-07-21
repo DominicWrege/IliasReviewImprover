@@ -21,13 +21,13 @@ function saveWidthSettings(width) {
 	if (!width) {
 		return;
 	}
-	chrome?.storage.local.set({ width });
+	chrome.storage.local.set({ width });
 }
 
 async function loadSettings() {
 	const defaultWidth = 40;
 	return new Promise((resolve, _reject) => {
-		chrome?.storage.local.get(["width"], (result) => {
+		chrome.storage.local.get(["width"], (result) => {
 			resolve(result.width ?? defaultWidth);
 		});
 	});
