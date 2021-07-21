@@ -1,6 +1,5 @@
 const slider = document.querySelector("#width-slider");
 const valueLabel = document.querySelector("#value-slider");
-const widthKey = "width";
 
 if (slider && valueLabel) {
 	const unit = "rem";
@@ -35,20 +34,12 @@ function isChrome() {
 
 async function loadSettings() {
 	const defaultWidth = 40;
-	if (!isChrome) {
-		const obj = await browser.storage.local.get(widthKey);
-		if (obj[widthKey]) {
-			return obj[widthKey];
-		}
-	} else {
+	if (isChrome) {
 		return new Promise((resolve, _reject) => {
-			chrome.storage.local.get([widthKey], (result) => {
-				if (result?.width) {
-					return resolve(result.width);
-				}
-				return resolve(defaultWidth);
+			chrome.storage.local.get(["width"], (result) => {
+				resolve(result.width ?? defaultWidth);
 			});
 		});
 	}
-	return defaultWidth;
+	return (await browser.storage.local.get("width")) ?? defaultWidth;
 }
