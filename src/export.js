@@ -1,4 +1,4 @@
-// const JSZip = require("jszip");
+const JSZip = require("jszip");
 import * as util from "./util";
 
 function getAssignmentName() {
