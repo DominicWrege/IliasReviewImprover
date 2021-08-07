@@ -1,9 +1,10 @@
+
 const slider = document.querySelector("#width-slider");
 const valueLabel = document.querySelector("#value-slider");
 
 if (slider && valueLabel) {
 	const unit = "rem";
-	loadSettings().then((width) => {
+	load().then((width) => {
 		slider.value = width;
 		valueLabel.textContent = `${width}${unit}`;
 	});
@@ -24,7 +25,7 @@ function saveWidthSettings(width) {
 	chrome.storage.local.set({ width });
 }
 
-async function loadSettings() {
+export async function load() {
 	const defaultWidth = 40;
 	return new Promise((resolve, _reject) => {
 		chrome.storage.local.get(["width"], (result) => {

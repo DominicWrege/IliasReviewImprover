@@ -1,4 +1,5 @@
-const JSZip = require("jszip");
+// const JSZip = require("jszip");
+import * as util from "./util";
 
 function getAssignmentName() {
     const select = document.querySelector(
@@ -100,9 +101,9 @@ export function setupExportButtons() {
         "fieldset.ilTableFilter > span:nth-child(3)"
     );
     // util.js
-    const jsonButton = createBlueButton("Export to JSON");
+    const jsonButton = util.createBlueButton("Export to JSON");
     // util.js
-    const archiveButton = createBlueButton("Export to archive");
+    const archiveButton = util.createBlueButton("Export to archive");
     jsonButton.addEventListener("click", exportJSONHandler);
     archiveButton.addEventListener("click", exportArchiveHandler);
     span.append(archiveButton);

@@ -10,23 +10,13 @@
 	5. Do it only once: Insert the question into the title
 */
 
-import { parseAnswer, downloadAnswer, createBlueButton } from "./util";
+import * as util from "./util";
 import { setupExportButtons } from "./export";
-import { loadSettings } from "./settings";
+import * as settings from "./settings.js";
 let questionIntoTitleInserted = false;
 
 main();
 
-async function handlerFixAnswers(event) {
-	event.preventDefault();
-	event.stopPropagation();
-
-	const loadingDiv = document.querySelector("div#loadingText");
-	loadingDiv.style.display = "inline-block";
-	document.querySelector("input#ImproveReview").remove();
-	// settings.js
-	await fixAllAnswers(`${await loadSettings()}rem`);
-}
 
 async function fixAllAnswers(widthStyle) {
 	let links = document.querySelectorAll(
@@ -49,6 +39,17 @@ async function fixAllAnswers(widthStyle) {
 	}
 }
 
+async function handlerFixAnswers(event) {
+	event.preventDefault();
+	event.stopPropagation();
+
+	const loadingDiv = document.querySelector("div#loadingText");
+	loadingDiv.style.display = "inline-block";
+	document.querySelector("input#ImproveReview").remove();
+	// settings.js
+	await fixAllAnswers(`${await settings.load()}rem`);
+}
+
 function loadingText() {
 	const loading = document.createElement("div");
 	loading.style = "margin-right: 5em;display:none";
@@ -59,7 +60,7 @@ function loadingText() {
 
 function fixButton() {
 	// util.js
-	const button = createBlueButton("Show Answers");
+	const button = util.createBlueButton("Show Answers");
 	button.id = "ImproveReview";
 	button.addEventListener("click", handlerFixAnswers);
 	return button;
@@ -103,7 +104,7 @@ function insertQuestionIntoTitle(html) {
 async function replaceAnswerShowQuestion(linkElement, widthStyle) {
 	if (linkElement) {
 		// util.js
-		const parsedResponse = parseAnswer(await downloadAnswer(linkElement));
+		const parsedResponse = util.parseAnswer(await util.downloadAnswer(linkElement));
 		if (parsedResponse.answer) {
 			linkElement.parentElement.replaceChild(
 				createAnswerDiv(parsedResponse.answer, widthStyle),

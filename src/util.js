@@ -11,7 +11,7 @@ export async function downloadAnswer(linkElement) {
     const link = linkElement.getAttribute("data-answer-href");
 
     let answerUrl = "";
-    const origin = this.window.location.origin;
+    const origin = window.location.origin;
     // check if instance is ilias or openbook
     if (origin.includes("openbook.")) {
         answerUrl = `${origin}/${link}`;
@@ -35,3 +35,4 @@ export function createBlueButton(text) {
     button.style.marginLeft = "0.35em";
     return button;
 }
+

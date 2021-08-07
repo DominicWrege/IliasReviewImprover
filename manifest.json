@@ -16,13 +16,12 @@
                 "https://ilias.th-koeln.de/ilias/ilias*"
             ],
             "js": [
-                "src/settings.js",
                 "dist/main.bundle.js"
             ]
         }
     ],
     "options_ui": {
-        "page": "settings.html",
+        "page": "src/settings.html",
         "open_in_tab": false
     },
     "permissions": [
