@@ -1,3 +1,5 @@
+const JSZip = require("jszip");
+
 function getAssignmentName() {
     const select = document.querySelector(
         "div.ilTableFilterInput select#question"
@@ -22,7 +24,7 @@ async function exportArchiveHandler(event) {
         createFile(zipContent, `${getAssignmentName()}.zip`);
     } catch (err) {
         console.error(err);
-    }finally{
+    } finally {
         event.target.value = oldValue;
     }
 }
@@ -41,7 +43,7 @@ async function exportJSONHandler(event) {
         );
     } catch (err) {
         console.error(err);
-    }finally{
+    } finally {
         event.target.value = oldValue;
     }
 }
@@ -93,7 +95,7 @@ function createFile(data, filename, type = "application/zip") {
     }
 }
 
-function setupExportButtons() {
+export function setupExportButtons() {
     const span = document.querySelector(
         "fieldset.ilTableFilter > span:nth-child(3)"
     );

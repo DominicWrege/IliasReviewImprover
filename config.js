@@ -11,5 +11,8 @@ module.exports = {
 		"**/*.txt",
 		"config.js",
 		"manifest.v3.json",
+		"src/main.js",
+		"src/export.js",
+		"src/util.js"
 	],
 };

@@ -9,14 +9,18 @@
 		"jszip": "^3.6.0"
 	},
 	"devDependencies": {
-		"web-ext": "6.2.0"
+		"web-ext": "6.2.0",
+		"webpack": "^5.49.0",
+		"webpack-cli": "^4.7.2"
 	},
 	"scripts": {
 		"start:url": "web-ext run -c config.js --start-url https://www.ilias.fh-dortmund.de/ilias/",
-		"start": "web-ext run -c config.js",
-		"build": "web-ext lint -c config.js && web-ext build -c config.js",
+		"start": "npm run webpack:dev && web-ext run -c config.js",
+		"build": "npm run webpack:production && web-ext lint -c config.js && web-ext build -c config.js",
 		"lint": "web-ext lint -c config.js",
-		"docs": "web-ext doc"
+		"docs": "web-ext doc",
+		"webpack:dev": "mode=development webpack-cli",
+		"webpack:production": "mode=production webpack-cli"
 	},
 	"webExt": {
 		"artifactsDir": "build"

@@ -1,16 +1,20 @@
 /*
 
-    What is the "improve button doing"?
+	What is the "improve button doing"?
     
-    1. Get all the a elmenets who are just links to the answers from the table
-    2. Extract the url from the a element 
-    3. Fetch the annswer
-    4. Parse the html from the response
-    4. Replace the a element with a div containing the fecthed answer
-    5. Do it only once: Insert the question into the title
+	1. Get all the a elmenets who are just links to the answers from the table
+	2. Extract the url from the a element 
+	3. Fetch the annswer
+	4. Parse the html from the response
+	4. Replace the a element with a div containing the fecthed answer
+	5. Do it only once: Insert the question into the title
 */
 
+import { parseAnswer, downloadAnswer, createBlueButton } from "./util";
+import { setupExportButtons } from "./export";
+import { loadSettings } from "./settings";
 let questionIntoTitleInserted = false;
+
 main();
 
 async function handlerFixAnswers(event) {
@@ -100,7 +104,7 @@ async function replaceAnswerShowQuestion(linkElement, widthStyle) {
 	if (linkElement) {
 		// util.js
 		const parsedResponse = parseAnswer(await downloadAnswer(linkElement));
-		if (parsedResponse?.answer) {
+		if (parsedResponse.answer) {
 			linkElement.parentElement.replaceChild(
 				createAnswerDiv(parsedResponse.answer, widthStyle),
 				linkElement
