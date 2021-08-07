@@ -14,6 +14,13 @@ Tools
 
 - [web-ext](https://github.com/mozilla/web-ext)
 
+
+### install
+
+```
+npm i
+```
+
 ### build
 
 ```
