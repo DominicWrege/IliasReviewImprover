@@ -16,7 +16,7 @@
 	"scripts": {
 		"start:url": "npm run webpack:dev && web-ext run -c config.js --start-url https://www.ilias.fh-dortmund.de/ilias/",
 		"start": "npm run webpack:dev && web-ext run -c config.js",
-		"build": "web-ext lint -c config.js && web-ext build -c config.js",
+		"build": "npm run webpack:build && web-ext lint -c config.js && web-ext build -c config.js",
 		"lint": "web-ext lint -c config.js",
 		"docs": "web-ext doc",
 		"webpack:dev": "mode=development webpack-cli",
