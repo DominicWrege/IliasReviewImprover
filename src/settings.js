@@ -12,7 +12,6 @@ if (slider && valueLabel) {
 	slider.addEventListener("input", (e) => {
 		e.preventDefault();
 		const width = e.target.value;
-		console.log(width);
 		valueLabel.textContent = `${width}${unit}`;
 		saveWidthSettings(width);
 	});
