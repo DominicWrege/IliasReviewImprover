@@ -10,9 +10,6 @@ module.exports = {
 		"**/*.md",
 		"**/*.txt",
 		"config.js",
-		"manifest.v3.json",
-		"src/main.js",
-		"src/export.js",
-		"src/util.js"
+		"manifest.v3.json"
 	],
 };
