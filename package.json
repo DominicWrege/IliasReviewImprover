@@ -1,6 +1,6 @@
 {
 	"name": "ilias-review-improver",
-	"version": "1.1.0",
+	"version": "1.0.3",
 	"description": "Simple Ilias Review Improver",
 	"main": "main.ts",
 	"author": "Dominic Wrege",
@@ -18,11 +18,11 @@
 	"scripts": {
 		"start:url": "npm run webpack:dev && web-ext run -c config.js --start-url https://www.ilias.fh-dortmund.de/ilias/",
 		"start": "npm run webpack:dev && web-ext run -c config.js",
-		"build": "npm run webpack:build && web-ext lint -c config.js && web-ext build -c config.js",
+		"build": "npm run webpack:build && web-ext lint -c config.js && web-ext build -c config.js -o",
 		"lint": "web-ext lint -c config.js",
 		"docs": "web-ext doc",
-		"webpack:build": "mode=development webpack-cli",
-		"webpack:watch": "mode=development webpack-cli --watch"
+		"webpack:build": "webpack-cli",
+		"webpack:dev": "mode=development webpack-cli --watch"
 	},
 	"webExt": {
 		"artifactsDir": "build"

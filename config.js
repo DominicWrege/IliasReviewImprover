@@ -9,7 +9,8 @@ module.exports = {
 		"**/*.sketch",
 		"**/*.md",
 		"**/*.txt",
-		"config.js",
-		"manifest.v3.json"
+		"package.json",
+		"**/*config.js",
+		"tsconfig.json"
 	],
 };
