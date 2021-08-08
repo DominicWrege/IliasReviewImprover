@@ -18,7 +18,7 @@ if (slider && valueLabel) {
 	});
 }
 
-function saveWidthSettings(width: string) {
+function saveWidthSettings(width: string): void {
 	if (!width) {
 		return;
 	}
@@ -26,7 +26,7 @@ function saveWidthSettings(width: string) {
 	chrome.storage.local.set({ width });
 }
 
-export async function load() {
+export async function load(): Promise<number> {
 	const defaultWidth = 40;
 	return new Promise((resolve, _reject) => {
 		// @ts-ignore

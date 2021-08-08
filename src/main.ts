@@ -164,3 +164,4 @@ function checkBoxFont(): HTMLDivElement {
 	wrapper.appendChild(label);
 	return wrapper;
 }
+
