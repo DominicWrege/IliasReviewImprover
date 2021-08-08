@@ -15,7 +15,9 @@ import { setupExportButtons } from "./export";
 import * as settings from "./settings";
 let questionIntoTitleInserted = false;
 
+// -------- main -------
 main();
+// -------- main -------
 
 
 async function fixAllAnswers(widthStyle: string) {
