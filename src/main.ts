@@ -16,6 +16,7 @@ import * as settings from "./settings";
 
 
 // -------- start point -------
+
 function main(): void {
 	const bar = document.querySelector(
 		".ilTableCommandRowTop > div:nth-child(2)"
@@ -31,8 +32,6 @@ function main(): void {
 
 let questionIntoTitleInserted = false;
 main();
-
-
 
 // -------- start point -------
 
