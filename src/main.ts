@@ -13,12 +13,9 @@
 import * as util from "./util";
 import { setupExportButtons } from "./export";
 import * as settings from "./settings";
-let questionIntoTitleInserted = false;
+
 
 // -------- start point -------
-
-main();
-
 function main(): void {
 	const bar = document.querySelector(
 		".ilTableCommandRowTop > div:nth-child(2)"
@@ -31,6 +28,11 @@ function main(): void {
 		bar.prepend(loadingText());
 	}
 }
+
+let questionIntoTitleInserted = false;
+main();
+
+
 
 // -------- start point -------
 
