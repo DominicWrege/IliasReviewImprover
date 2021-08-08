@@ -23,7 +23,7 @@ export async function downloadAnswer(linkElement: HTMLAnchorElement | null): Pro
     } else { //ilias
         answerUrl = `${origin}/ilias/${link}`;
     }
-    let response = await fetch(`${answerUrl}`);
+    const response = await fetch(`${answerUrl}`);
 
     if (!response.ok) {
         throw new Error(`Util.js: Error while download the answer : answerUrl = ${answerUrl}`);
