@@ -21,8 +21,7 @@
 		"build": "npm run webpack:build && web-ext lint -c config.js && web-ext build -c config.js",
 		"lint": "web-ext lint -c config.js",
 		"docs": "web-ext doc",
-		"webpack:dev": "mode=development webpack-cli",
-		"webpack:build": "mode=production webpack-cli",
+		"webpack:build": "mode=development webpack-cli",
 		"webpack:watch": "mode=development webpack-cli --watch"
 	},
 	"webExt": {
