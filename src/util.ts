@@ -1,14 +1,19 @@
-export function parseAnswer(text) {
+interface Answer {
+    html: Document,
+    answer: HTMLDivElement | null
+}
+
+export function parseAnswer(text: string): Answer {
     const html = new DOMParser().parseFromString(text, "text/html");
     return {
-        html: html,
+        html,
         answer: html.querySelector("div.ilc_qanswer_Answer"),
     };
 }
 
-export async function downloadAnswer(linkElement) {
+export async function downloadAnswer(linkElement: HTMLAnchorElement | null): Promise<string> {
 
-    const link = linkElement.getAttribute("data-answer-href");
+    const link = linkElement?.getAttribute("data-answer-href");
 
     let answerUrl = "";
     const origin = window.location.origin;
@@ -26,7 +31,7 @@ export async function downloadAnswer(linkElement) {
     return response.text();
 }
 
-export function createBlueButton(text) {
+export function createBlueButton(text: string): HTMLInputElement {
     const button = document.createElement("input");
     button.type = "submit";
     button.classList.add("btn-default");

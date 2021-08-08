@@ -1,19 +1,25 @@
 const JSZip = require("jszip");
 import * as util from "./util";
 
-function getAssignmentName() {
-    const select = document.querySelector(
+function getAssignmentName(): string | null {
+    const select: HTMLSelectElement | null = document.querySelector(
         "div.ilTableFilterInput select#question"
     );
-    const options = select.options;
-    return options[select.selectedIndex].firstChild.textContent
-        .replace(/\s/g, "")
-        .split("(")[0];
+    const firstChild = select?.options[select.selectedIndex]?.firstChild;
+
+    if (firstChild?.textContent) {
+        return firstChild?.textContent
+            .replace(/\s/g, "")
+            .split("(")[0];
+    }
+
+    return null;
 }
 
-async function exportArchiveHandler(event) {
-    const oldValue = event.target.value.slice();
-    event.target.value = "loading...";
+async function exportArchiveHandler(event: Event) {
+    const button = event.target as HTMLInputElement;
+    const oldValue = button.value.slice();
+    button.value = "loading...";
     event.preventDefault();
     try {
         const rows = await downloadRowData();
@@ -26,57 +32,72 @@ async function exportArchiveHandler(event) {
     } catch (err) {
         console.error(err);
     } finally {
-        event.target.value = oldValue;
+        button.value = oldValue;
     }
 }
 
-async function exportJSONHandler(event) {
+async function exportJSONHandler(event: Event): Promise<void> {
     event.preventDefault();
-    const oldValue = event.target.value.slice();
-    event.target.value = "loading...";
+    const button = event.target as HTMLButtonElement;
+    const oldValue = button.value.slice();
+    button.value = "loading...";
 
     try {
         const rows = await downloadRowData();
         createFile(
             JSON.stringify(rows),
-            `${getAssignmentName() ?? ilias_export}.json`,
+            `${getAssignmentName() ?? "ilias_export"}.json`,
             "application/json"
         );
     } catch (err) {
         console.error(err);
     } finally {
-        event.target.value = oldValue;
+        button.value = oldValue;
     }
 }
 
-async function downloadRowData() {
-    const data = getDataFromRows().map(async (row) => {
+async function downloadRowData(): Promise<any> {
+    const data = getDataFromRows().map(async (row: TableRow) => {
         // util.js
-        const answerData = await downloadAnswer(row.answerLink);
-        delete row.answerLink;
+        const answerData = await util.downloadAnswer(row.answerLink);
+        // if (row?.answerLink) {
+        //     delete row.answerLink;
+        // }
         return {
             ...row, // util.js
-            answerText: parseAnswer(answerData).answer?.textContent,
+            answerText: util.parseAnswer(answerData).answer?.textContent,
         };
     });
-    return await Promise.all(data);
+    return Promise.all(data);
 }
 
-function getDataFromRows() {
-    let data = [];
-    for (const tr of document.querySelectorAll("tr.tblrow1,tr.tblrow2")) {
+
+interface TableRow {
+    lastName: string,
+    firstName: string,
+    username: string,
+    points: number,
+    answerLink: HTMLAnchorElement | null
+}
+
+function getDataFromRows(): TableRow[] {
+    let data: TableRow[] = [];
+
+    document.querySelectorAll("tr.tblrow1,tr.tblrow2").forEach(tr => {
+        let div = tr.children[3]?.querySelector("div.form-inline > input") as HTMLInputElement;
         data.push({
             lastName: tr.children[0]?.textContent ?? "",
             firstName: tr.children[1]?.textContent ?? "",
             username: tr.children[2]?.textContent ?? "",
-            points: parseFloat(tr.children[3]?.querySelector("div.form-inline > input").value ?? 0),
-            answerLink: tr.children[4]?.firstElementChild ?? "",
+            points: parseFloat(div.value ?? 0),
+            answerLink: tr.children[4]?.firstElementChild as HTMLAnchorElement,
         });
-    }
+    });
+
     return data;
 }
 
-function createFile(data, filename, type = "application/zip") {
+function createFile(data: BlobPart, filename: string, type = "application/zip") {
     const file = new Blob([data], { type: type });
     if (window.navigator.msSaveOrOpenBlob)
         // IE10+
@@ -96,8 +117,8 @@ function createFile(data, filename, type = "application/zip") {
     }
 }
 
-export function setupExportButtons() {
-    const span = document.querySelector(
+export function setupExportButtons(): void {
+    const span: HTMLSpanElement | null = document.querySelector(
         "fieldset.ilTableFilter > span:nth-child(3)"
     );
     // util.js
@@ -106,6 +127,6 @@ export function setupExportButtons() {
     const archiveButton = util.createBlueButton("Export to archive");
     jsonButton.addEventListener("click", exportJSONHandler);
     archiveButton.addEventListener("click", exportArchiveHandler);
-    span.append(archiveButton);
-    span.append(jsonButton);
+    span?.append(archiveButton);
+    span?.append(jsonButton);
 }

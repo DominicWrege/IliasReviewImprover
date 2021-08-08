@@ -1,0 +1,25 @@
+{
+    "include": [
+        "./src/**/*.ts",
+    ],
+    "exclude": [
+        "node_modules",
+        "bower_components",
+        "dist",
+        "build",
+        "icons"
+    ],
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "strict": true,
+        "module": "es6",
+        "target": "es2019",
+        "allowJs": false,
+        "lib": [
+            "DOM"
+        ],
+        "moduleResolution": "node",
+    }
+}

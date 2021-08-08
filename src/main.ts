@@ -12,20 +12,22 @@
 
 import * as util from "./util";
 import { setupExportButtons } from "./export";
-import * as settings from "./settings.js";
+import * as settings from "./settings";
 let questionIntoTitleInserted = false;
 
 main();
 
 
-async function fixAllAnswers(widthStyle) {
+async function fixAllAnswers(widthStyle: string) {
 	let links = document.querySelectorAll(
 		"td.std > a.il_ContainerItemCommand[data-answer-href]"
 	);
-	let promises = [];
-	for (const a of links) {
-		promises.push(replaceAnswerShowQuestion(a, widthStyle));
+
+	let promises: any[] = [];
+	links.forEach((a: Element) => {
+		promises.push(replaceAnswerShowQuestion(a as HTMLAnchorElement, widthStyle));
 	}
+	);
 
 	if (promises.length > 0) {
 		try {
@@ -34,31 +36,35 @@ async function fixAllAnswers(widthStyle) {
 			console.error("error:", err);
 		}
 		const loadingDiv = document.querySelector("div#loadingText");
-		loadingDiv.parentElement.prepend(checkBoxFont());
-		loadingDiv.remove();
+		loadingDiv?.parentElement?.prepend(checkBoxFont());
+		loadingDiv?.remove();
 	}
 }
 
-async function handlerFixAnswers(event) {
+async function handlerFixAnswers(event: Event): Promise<void> {
 	event.preventDefault();
 	event.stopPropagation();
 
-	const loadingDiv = document.querySelector("div#loadingText");
-	loadingDiv.style.display = "inline-block";
-	document.querySelector("input#ImproveReview").remove();
+	const loadingDiv: HTMLButtonElement | null = document.querySelector("div#loadingText");
+	if (loadingDiv) {
+		loadingDiv.style.display = "inline-block";
+	}
+	document.querySelector("input#ImproveReview")?.remove();
 	// settings.js
 	await fixAllAnswers(`${await settings.load()}rem`);
 }
 
-function loadingText() {
-	const loading = document.createElement("div");
-	loading.style = "margin-right: 5em;display:none";
+function loadingText(): HTMLDivElement {
+	const loading: HTMLDivElement | null = document.createElement("div");
+	if (loading) {
+		loading.setAttribute("style", "margin-right: 5em;display:none");
+	}
 	loading.id = "loadingText";
 	loading.textContent = "loading...";
 	return loading;
 }
 
-function fixButton() {
+function fixButton(): HTMLInputElement {
 	// util.js
 	const button = util.createBlueButton("Show Answers");
 	button.id = "ImproveReview";
@@ -66,24 +72,26 @@ function fixButton() {
 	return button;
 }
 
-function toggleFont(event) {
-	const checkbox = event.target;
+function toggleFont(event: Event): void {
+	const checkbox = event.target as HTMLInputElement;
 	const answers = document.querySelectorAll(
 		"td.std div div.ilc_qanswer_Answer.solutionbox"
 	);
 
-	for (const element of answers)
+	answers.forEach((element: any) => {
 		if (checkbox.checked) {
 			element.style.fontFamily = `Courier, Monaco, monospace`;
 		} else {
 			element.style.fontFamily = "";
 		}
+	});
+
 }
 
-function createAnswerDiv(answer, widthStyle) {
+function createAnswerDiv(answer: HTMLDivElement, widthStyle: string): HTMLDivElement {
 	const div = document.createElement("div");
 	div.style.width = widthStyle;
-	div.style.padding = 0;
+	div.style.padding = "0";
 	div.style.background = "#FFF !important";
 	answer.style.border = "none";
 	// div.style.maxWidth = "700px !important";
@@ -92,21 +100,23 @@ function createAnswerDiv(answer, widthStyle) {
 	return div;
 }
 
-function insertQuestionIntoTitle(html) {
-	const questionElement = html.querySelector("div.ilc_qtitle_Title");
-	questionElement.style =
-		"background-color: #fff;padding: 0.4em;margin: 0.5em 0 0.5em 0;";
-	const titleH3 = document.querySelector("h3.ilTableHeaderTitle");
-	titleH3.parentElement.appendChild(questionElement);
+function insertQuestionIntoTitle(html: Document): void {
+	const questionElement: HTMLDivElement | null = html.querySelector("div.ilc_qtitle_Title");
+	if (questionElement?.style) {
+		questionElement.setAttribute(
+			"background-color", "#fff;padding: 0.4em;margin: 0.5em 0 0.5em 0;");
+		const titleH3: Element | null = document.querySelector("h3.ilTableHeaderTitle");
+		titleH3?.parentElement?.appendChild(questionElement);
+	}
 	questionIntoTitleInserted = true;
 }
 
-async function replaceAnswerShowQuestion(linkElement, widthStyle) {
+async function replaceAnswerShowQuestion(linkElement: HTMLAnchorElement | null, widthStyle: string): Promise<void> {
 	if (linkElement) {
 		// util.js
 		const parsedResponse = util.parseAnswer(await util.downloadAnswer(linkElement));
 		if (parsedResponse.answer) {
-			linkElement.parentElement.replaceChild(
+			linkElement?.parentElement?.replaceChild(
 				createAnswerDiv(parsedResponse.answer, widthStyle),
 				linkElement
 			);
@@ -119,7 +129,7 @@ async function replaceAnswerShowQuestion(linkElement, widthStyle) {
 	}
 }
 
-function checkBoxFont() {
+function checkBoxFont(): HTMLDivElement {
 	const wrapper = document.createElement("div");
 	wrapper.style.display = "inline";
 	wrapper.style.marginRight = "2em";
@@ -129,14 +139,14 @@ function checkBoxFont() {
 	input.name = "font";
 	input.addEventListener("click", toggleFont);
 	const label = document.createElement("label");
-	label.for = "font-sytle";
+	label.setAttribute("for", "font-sytle");
 	label.style.paddingLeft = "1em";
 	label.textContent = "Monospace";
 	wrapper.appendChild(input);
 	wrapper.appendChild(label);
 	return wrapper;
 }
-function main() {
+function main(): void {
 	const bar = document.querySelector(
 		".ilTableCommandRowTop > div:nth-child(2)"
 	);

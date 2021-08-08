@@ -5,11 +5,20 @@ const mode = process.env.mode ?? "production";
 console.log(`using mode: ${mode}`);
 
 module.exports = {
-    entry: "./src/main.js",
+    entry: path.resolve(__dirname, "src/main.ts"),
     plugins: [
     ],
     resolve: {
-        extensions: [".js"]
+        extensions: [".js", ".ts"]
+    },
+    module: {
+        rules: [
+            {
+                test: /\.ts/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+        ],
     },
     mode,
     output: {
