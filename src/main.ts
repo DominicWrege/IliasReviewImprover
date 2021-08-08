@@ -15,9 +15,24 @@ import { setupExportButtons } from "./export";
 import * as settings from "./settings";
 let questionIntoTitleInserted = false;
 
-// -------- main -------
+// -------- start point -------
+
 main();
-// -------- main -------
+
+function main(): void {
+	const bar = document.querySelector(
+		".ilTableCommandRowTop > div:nth-child(2)"
+	);
+	const tabActive = document.querySelector("#tab_manscoring.active");
+	const mainTable = document.querySelector("tbody>tr>td.ilCenter");
+	if (bar && tabActive && !mainTable) {
+		setupExportButtons();
+		bar.prepend(fixButton());
+		bar.prepend(loadingText());
+	}
+}
+
+// -------- start point -------
 
 
 async function fixAllAnswers(widthStyle: string) {
@@ -147,16 +162,4 @@ function checkBoxFont(): HTMLDivElement {
 	wrapper.appendChild(input);
 	wrapper.appendChild(label);
 	return wrapper;
-}
-function main(): void {
-	const bar = document.querySelector(
-		".ilTableCommandRowTop > div:nth-child(2)"
-	);
-	const tabActive = document.querySelector("#tab_manscoring.active");
-	const mainTable = document.querySelector("tbody>tr>td.ilCenter");
-	if (bar && tabActive && !mainTable) {
-		setupExportButtons();
-		bar.prepend(fixButton());
-		bar.prepend(loadingText());
-	}
 }
