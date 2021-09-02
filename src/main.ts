@@ -120,9 +120,13 @@ function createAnswerDiv(answer: HTMLDivElement, widthStyle: string): HTMLDivEle
 
 function insertQuestionIntoTitle(html: Document): void {
 	const questionElement: HTMLDivElement | null = html.querySelector("div.ilc_qtitle_Title");
-	if (questionElement?.style) {
-		questionElement.setAttribute(
-			"background-color", "#fff;padding: 0.4em;margin: 0.5em 0 0.5em 0;");
+	if (questionElement) {
+		questionElement.setAttribute("style",
+			`background: #fff;
+			 padding: 1rem 1.75rem;
+			 margin: 1em 0;
+			 width: 80%;
+			 max-width: 850px;`);
 		const titleH3: Element | null = document.querySelector("h3.ilTableHeaderTitle");
 		titleH3?.parentElement?.appendChild(questionElement);
 	}

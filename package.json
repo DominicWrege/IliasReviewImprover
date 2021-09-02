@@ -1,6 +1,6 @@
 {
 	"name": "ilias-review-improver",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Simple Ilias Review Improver",
 	"main": "main.ts",
 	"author": "Dominic Wrege",
@@ -22,7 +22,8 @@
 		"lint": "web-ext lint -c config.js",
 		"docs": "web-ext doc",
 		"webpack:build": "webpack-cli",
-		"webpack:dev": "mode=development webpack-cli --watch"
+		"webpack:dev": "mode=development webpack-cli",
+		"webpack:watch": "mode=development webpack-cli --watch &"
 	},
 	"webExt": {
 		"artifactsDir": "build"
