@@ -11,30 +11,33 @@
 */
 
 import * as util from "./util";
-import { setupExportButtons } from "./export";
+// import { setupExportButtons } from "./export";
 import * as settings from "./settings";
 
-
 // -------- start point -------
-
 function main(): void {
-	const bar = document.querySelector(
-		".ilTableCommandRowTop > div:nth-child(2)"
-	);
-	const tabActive = document.querySelector("#tab_manscoring.active");
-	const mainTable = document.querySelector("tbody>tr>td.ilCenter");
-	if (bar && tabActive && !mainTable) {
-		setupExportButtons();
-		bar.prepend(fixButton());
-		bar.prepend(loadingText());
+	const tabActive = document.querySelector("ul#ilTab>li#tab_manscoring");
+	if (tabActive) {
+		const tableBar = getTableBar();
+		if (tableBar && tableIsNotEmpty()) {
+			// setupExportButtons();
+			tableBar.append(fixButton());
+			tableBar.append(loadingText());
+		}
 	}
 }
 
 let questionIntoTitleInserted = false;
 main();
-
 // -------- start point -------
 
+function tableIsNotEmpty(): boolean {
+	return !document.querySelector("tbody>tr>td.ilCenter");
+}
+
+function getTableBar(): Element | null {
+	return document.querySelector("fieldset.ilTableFilter > span");
+}
 
 async function fixAllAnswers(widthStyle: string) {
 	let links = document.querySelectorAll(
@@ -43,9 +46,10 @@ async function fixAllAnswers(widthStyle: string) {
 
 	let promises: any[] = [];
 	links.forEach((a: Element) => {
-		promises.push(replaceAnswerShowQuestion(a as HTMLAnchorElement, widthStyle));
-	}
-	);
+		promises.push(
+			replaceAnswerShowQuestion(a as HTMLAnchorElement, widthStyle)
+		);
+	});
 
 	if (promises.length > 0) {
 		try {
@@ -53,8 +57,11 @@ async function fixAllAnswers(widthStyle: string) {
 		} catch (err) {
 			console.error("error:", err);
 		}
-		const loadingDiv = document.querySelector("div#loadingText");
-		loadingDiv?.parentElement?.prepend(checkBoxFont());
+		const loadingDiv = document.querySelector(
+			"div#loadingText"
+		) as HTMLElement | null;
+
+		loadingDiv?.parentElement?.append(checkBoxFont());
 		loadingDiv?.remove();
 	}
 }
@@ -63,7 +70,8 @@ async function handlerFixAnswers(event: Event): Promise<void> {
 	event.preventDefault();
 	event.stopPropagation();
 
-	const loadingDiv: HTMLButtonElement | null = document.querySelector("div#loadingText");
+	const loadingDiv: HTMLButtonElement | null =
+		document.querySelector("div#loadingText");
 	if (loadingDiv) {
 		loadingDiv.style.display = "inline-block";
 	}
@@ -75,7 +83,11 @@ async function handlerFixAnswers(event: Event): Promise<void> {
 function loadingText(): HTMLDivElement {
 	const loading: HTMLDivElement | null = document.createElement("div");
 	if (loading) {
-		loading.setAttribute("style", "margin-right: 5em;display:none");
+		loading.style.display = "none";
+		loading.style.marginRight = "3em";
+		loading.style.marginBottom = "1.25em";
+		loading.style.fontWeight = "bold";
+		loading.style.marginLeft = "12px";
 	}
 	loading.id = "loadingText";
 	loading.textContent = "loading...";
@@ -85,6 +97,7 @@ function loadingText(): HTMLDivElement {
 function fixButton(): HTMLInputElement {
 	// util.js
 	const button = util.createBlueButton("Show Answers");
+	button.style.marginBottom = "1.25em";
 	button.id = "ImproveReview";
 	button.addEventListener("click", handlerFixAnswers);
 	return button;
@@ -103,10 +116,12 @@ function toggleFont(event: Event): void {
 			element.style.fontFamily = "";
 		}
 	});
-
 }
 
-function createAnswerDiv(answer: HTMLDivElement, widthStyle: string): HTMLDivElement {
+function createAnswerDiv(
+	answer: HTMLDivElement,
+	widthStyle: string
+): HTMLDivElement {
 	const div = document.createElement("div");
 	div.style.width = widthStyle;
 	div.style.padding = "0";
@@ -119,35 +134,52 @@ function createAnswerDiv(answer: HTMLDivElement, widthStyle: string): HTMLDivEle
 }
 
 function insertQuestionIntoTitle(html: Document): void {
-	const questionElement: HTMLDivElement | null = html.querySelector("div.ilc_qtitle_Title");
+	const questionElement: HTMLDivElement | null = html.querySelector(
+		"div.ilc_qtitle_Title"
+	);
 	if (questionElement) {
-		questionElement.setAttribute("style",
+		questionElement.setAttribute(
+			"style",
 			`background: #fff;
 			 padding: 1rem 1.75rem;
-			 margin: 1em 0;
+			 margin: 0.75em 0;
 			 width: 80%;
-			 max-width: 850px;`);
-		const titleH3: Element | null = document.querySelector("h3.ilTableHeaderTitle");
-		titleH3?.parentElement?.appendChild(questionElement);
+			 max-width: 850px;`
+		);
+		let title: Element | null = document.querySelector(
+			"div.ilTableHeaderTitle"
+		);
+		if (!title) {
+			title = document.querySelector("h3.ilTableHeaderTitle");
+			title?.parentElement?.appendChild(questionElement);
+		} else {
+			title?.appendChild(questionElement);
+		}
 	}
 	questionIntoTitleInserted = true;
 }
 
-async function replaceAnswerShowQuestion(linkElement: HTMLAnchorElement | null, widthStyle: string): Promise<void> {
-	if (linkElement) {
-		// util.js
-		const parsedResponse = util.parseAnswer(await util.downloadAnswer(linkElement));
-		if (parsedResponse.answer) {
-			linkElement?.parentElement?.replaceChild(
-				createAnswerDiv(parsedResponse.answer, widthStyle),
-				linkElement
-			);
-		} else {
-			throw "Ilias error :/";
-		}
-		if (!questionIntoTitleInserted) {
-			insertQuestionIntoTitle(parsedResponse.html);
-		}
+async function replaceAnswerShowQuestion(
+	linkElement: HTMLAnchorElement | null,
+	widthStyle: string
+): Promise<void> {
+	if (!linkElement) {
+		return;
+	}
+	// util.js
+	const parsedResponse = util.parseAnswer(
+		await util.downloadAnswer(linkElement)
+	);
+	if (parsedResponse.answer) {
+		linkElement?.parentElement?.replaceChild(
+			createAnswerDiv(parsedResponse.answer, widthStyle),
+			linkElement
+		);
+	} else {
+		throw "Ilias error :/";
+	}
+	if (!questionIntoTitleInserted) {
+		insertQuestionIntoTitle(parsedResponse.html);
 	}
 }
 
@@ -157,15 +189,15 @@ function checkBoxFont(): HTMLDivElement {
 	wrapper.style.marginRight = "2em";
 	const input = document.createElement("input");
 	input.type = "checkbox";
+	input.style.marginLeft = "10px";
 	input.id = "font-style";
 	input.name = "font";
 	input.addEventListener("click", toggleFont);
 	const label = document.createElement("label");
 	label.setAttribute("for", "font-sytle");
-	label.style.paddingLeft = "1em";
+	label.style.paddingLeft = "0.75em";
 	label.textContent = "Monospace";
 	wrapper.appendChild(input);
 	wrapper.appendChild(label);
 	return wrapper;
 }
-

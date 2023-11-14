@@ -1,9 +1,8 @@
 {
-	"manifest_version": 3,
+	"manifest_version": 2,
 	"name": "Ilias Review Improver",
-	"id": 123,
-	"version": "1.1.3",
-	"description": "Improve ILIAS answer grading review process. Works only on the FH-Dortmund ILIAS E-Learning platform.",
+	"version": "1.3.0",
+	"description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
 	"icons": {
 		"32": "icons/icon32.png",
 		"48": "icons/icon48.png",
@@ -12,10 +11,11 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://openbook.fh-dortmund.de/ilias*",
+				"https://openbook.fh-dortmund.de/ilias.php?ref_id=*",
 				"https://www.ilias.fh-dortmund.de/ilias/ilias*",
 				"https://ilias.th-koeln.de/ilias/ilias*",
-				"https://exam.fh-dortmund.de/ilias*"
+				"https://exam.fh-dortmund.de/ilias.php?ref_id=*",
+				"https://test7.ilias.de/ilias.php?ref_id=*"
 			],
 			"js": ["dist/main.bundle.js"]
 		}
@@ -24,19 +24,16 @@
 		"page": "src/settings.html",
 		"open_in_tab": false
 	},
-	"permissions": ["storage"],
-	"host_permissions": [
-		"https://openbook.fh-dortmund.de/*",
-		"https://www.ilias.fh-dortmund.de/*",
-		"https://ilias.th-koeln.de/*",
-		"https://exam.fh-dortmund.de/*"
+	"permissions": [
+		"https://www.ilias.fh-dortmund.de/ilias/*",
+		"https://ilias.th-koeln.de/ilias/*",
+		"https://exam.fh-dortmund.de/ilias*",
+		"https://test7.ilias.de/ilias*",
+		"storage"
 	],
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "dominic.wrege@fh-dortmund.de"
 		}
-	},
-	"content_security_policy": {
-		"extension_pages": "default-src 'self'"
 	}
 }
