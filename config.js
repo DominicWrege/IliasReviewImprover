@@ -1,5 +1,5 @@
 module.exports = {
-	verbose: true,
+	verbose: false,
 	build: {
 		overwriteDest: true,
 	},
@@ -11,6 +11,6 @@ module.exports = {
 		"**/*.txt",
 		"package.json",
 		"**/*config.js",
-		"tsconfig.json"
+		"tsconfig.json",
 	],
 };

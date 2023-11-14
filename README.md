@@ -14,22 +14,22 @@ Tools
 
 - [web-ext](https://github.com/mozilla/web-ext)
 
-
-### install
+## install
 
 ```
 npm i
 ```
 
-### build
+## build
 
 ```
 npm run build
 ```
 
-After that you can find the ready extensions in the build directory.
+The compiled zip files are the the `./build` folder.  
+example: `./build/ilias_review_improver-1.0.5`
 
-### run
+## run
 
 ```
 npm run start
