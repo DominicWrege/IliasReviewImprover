@@ -7,6 +7,8 @@ module.exports = {
 		"package-lock.json",
 		"yarn.lock",
 		"**/*.sketch",
+		"dist/main.js",
+		"src/*.ts",
 		"**/*.md",
 		"**/*.txt",
 		"package.json",

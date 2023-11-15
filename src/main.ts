@@ -11,7 +11,6 @@
 */
 
 import * as util from "./util";
-// import { setupExportButtons } from "./export";
 import * as settings from "./settings";
 
 // -------- start point -------
@@ -96,7 +95,7 @@ function loadingText(): HTMLDivElement {
 
 function fixButton(): HTMLInputElement {
 	// util.js
-	const button = util.createBlueButton("Show Answers");
+	const button = util.createBlueButton("Antworten anzeigen");
 	button.style.marginBottom = "1.25em";
 	button.id = "ImproveReview";
 	button.addEventListener("click", handlerFixAnswers);

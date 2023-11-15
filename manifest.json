@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Ilias Review Improver",
-	"version": "1.3.1",
+	"version": "1.3.3",
 	"description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
 	"icons": {
 		"32": "icons/icon32.png",

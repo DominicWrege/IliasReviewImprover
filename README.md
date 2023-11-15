@@ -8,35 +8,33 @@ answer links and replaces theme with the answer text.
 Functions:
 
 - Inserts all answers into the table
-- Exports all the rows as archive (ZIP) or JSON file.
 
 Tools
 
+- [bun](bun.sh)
 - [web-ext](https://github.com/mozilla/web-ext)
 
 ## install
 
 ```
-npm i
+bun i
 ```
 
 ## build
 
 ```
-npm run build
+bun run build
 ```
 
 The compiled zip files are the the `./build` folder.  
-example: `./build/ilias_review_improver-1.0.5`
+example: `./build/ilias_review_improver-1.0.5.zip`
 
 ## run
 
 ```
-npm run start
+bun run start
 ```
 
-or
+## Test
 
-```
-npm run start:url
-```
+Use this [test link](https://test7.ilias.de/ilias.php?ref_id=50190&cmd=showManScoringByQuestionParticipantsTable&cmdClass=iltestscoringbyquestionsgui&cmdNode=8q:u2:t4&baseClass=ilRepositoryGUI)

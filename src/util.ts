@@ -11,14 +11,23 @@ export function parseAnswer(text: string): Answer {
 	};
 }
 
+function formatAnswerLink(linkPart: string): string {
+	if (location.pathname.includes("/ilias/")) {
+		`${window.location.origin}${linkPart}${linkPart}`;
+	}
+	return `${window.location.origin}/${linkPart}`;
+}
+
 export async function downloadAnswer(
 	linkElement: HTMLAnchorElement | null
 ): Promise<string> {
 	const targetLink = linkElement?.getAttribute("data-answer-href");
 
-	console.log(targetLink);
+	if (!targetLink) {
+		throw "no data-answer-href found";
+	}
 
-	const answerUrl = `${window.location.origin}/${targetLink}`;
+	const answerUrl = formatAnswerLink(targetLink);
 	const response = await fetch(answerUrl);
 
 	if (!response.ok) {
