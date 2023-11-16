@@ -9,7 +9,6 @@
 	4. Replace the a element with a div containing the fecthed answer
 	5. Do it only once: Insert the question into the title
 */
-
 import * as settings from "./settings";
 
 // -------- start point -------
@@ -202,7 +201,7 @@ interface Answer {
 	answer: HTMLDivElement | null;
 }
 
-export function parseAnswer(text: string): Answer {
+function parseAnswer(text: string): Answer {
 	const html = new DOMParser().parseFromString(text, "text/html");
 	return {
 		html,
@@ -217,7 +216,7 @@ function formatAnswerLink(linkPart: string): string {
 	return `${window.location.origin}/${linkPart}`;
 }
 
-export async function downloadAnswer(
+async function downloadAnswer(
 	linkElement: HTMLAnchorElement | null
 ): Promise<string> {
 	const targetLink = linkElement?.getAttribute("data-answer-href");
@@ -237,7 +236,7 @@ export async function downloadAnswer(
 	return response.text();
 }
 
-export function createBlueButton(text: string): HTMLInputElement {
+function createBlueButton(text: string): HTMLInputElement {
 	const button = document.createElement("input");
 	button.type = "submit";
 	button.classList.add("btn-default");

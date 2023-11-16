@@ -37,4 +37,4 @@ bun run start
 
 ## Test
 
-Use this [test link](https://test7.ilias.de/ilias.php?ref_id=50190&cmd=showManScoringByQuestionParticipantsTable&cmdClass=iltestscoringbyquestionsgui&cmdNode=8q:u2:t4&baseClass=ilRepositoryGUI)
+Use this [test link](https://test7.ilias.de/ilias.php?ref_id=50190&cmd=infoScreen&cmdClass=ilobjtestgui&cmdNode=2e:tk&baseClass=ilRepositoryGUI&ref_id=50190)
