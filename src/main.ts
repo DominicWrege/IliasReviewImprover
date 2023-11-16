@@ -10,7 +10,6 @@
 	5. Do it only once: Insert the question into the title
 */
 
-import * as util from "./util";
 import * as settings from "./settings";
 
 // -------- start point -------
@@ -94,8 +93,7 @@ function loadingText(): HTMLDivElement {
 }
 
 function fixButton(): HTMLInputElement {
-	// util.js
-	const button = util.createBlueButton("Antworten anzeigen");
+	const button = createBlueButton("Antworten anzeigen");
 	button.style.marginBottom = "1.25em";
 	button.id = "ImproveReview";
 	button.addEventListener("click", handlerFixAnswers);
@@ -166,9 +164,7 @@ async function replaceAnswerShowQuestion(
 		return;
 	}
 	// util.js
-	const parsedResponse = util.parseAnswer(
-		await util.downloadAnswer(linkElement)
-	);
+	const parsedResponse = parseAnswer(await downloadAnswer(linkElement));
 	if (parsedResponse.answer) {
 		linkElement?.parentElement?.replaceChild(
 			createAnswerDiv(parsedResponse.answer, widthStyle),
@@ -199,4 +195,54 @@ function checkBoxFont(): HTMLDivElement {
 	wrapper.appendChild(input);
 	wrapper.appendChild(label);
 	return wrapper;
+}
+
+interface Answer {
+	html: Document;
+	answer: HTMLDivElement | null;
+}
+
+export function parseAnswer(text: string): Answer {
+	const html = new DOMParser().parseFromString(text, "text/html");
+	return {
+		html,
+		answer: html.querySelector("div.ilc_qanswer_Answer"),
+	};
+}
+
+function formatAnswerLink(linkPart: string): string {
+	if (location.pathname.includes("/ilias/")) {
+		`${window.location.origin}/ilias/${linkPart}${linkPart}`;
+	}
+	return `${window.location.origin}/${linkPart}`;
+}
+
+export async function downloadAnswer(
+	linkElement: HTMLAnchorElement | null
+): Promise<string> {
+	const targetLink = linkElement?.getAttribute("data-answer-href");
+
+	if (!targetLink) {
+		throw "no data-answer-href found";
+	}
+
+	const answerUrl = formatAnswerLink(targetLink);
+	const response = await fetch(answerUrl);
+
+	if (!response.ok) {
+		throw new Error(
+			`Util.js: Error while download the answer : answerUrl = ${answerUrl}`
+		);
+	}
+	return response.text();
+}
+
+export function createBlueButton(text: string): HTMLInputElement {
+	const button = document.createElement("input");
+	button.type = "submit";
+	button.classList.add("btn-default");
+	button.classList.add("btn");
+	button.value = text;
+	button.style.marginLeft = "0.35em";
+	return button;
 }
