@@ -211,7 +211,7 @@ function parseAnswer(text: string): Answer {
 
 function formatAnswerLink(linkPart: string): string {
 	if (location.pathname.includes("/ilias/")) {
-		`${window.location.origin}/ilias/${linkPart}${linkPart}`;
+		`${window.location.origin}/ilias/${linkPart}`;
 	}
 	return `${window.location.origin}/${linkPart}`;
 }
