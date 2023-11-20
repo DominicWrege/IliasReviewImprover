@@ -1,6 +1,6 @@
 {
 	"name": "ilias-review-improver",
-	"version": "1.4.1",
+	"version": "1.4.0",
 	"description": "Simple Ilias Review Improver",
 	"main": "main.ts",
 	"author": "Dominic Wrege",

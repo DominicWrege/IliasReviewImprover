@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Ilias Review Improver",
-	"version": "1.4.1",
+	"version": "1.4.0",
 	"description": "Improve ILIAS answer grading review process. Works only the on the FH-Dortmund ILIAS E-Learning platform.",
 	"icons": {
 		"32": "icons/icon32.png",
@@ -33,7 +33,7 @@
 	],
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "dominic.wrege@fh-dortmund.de"
+			"id": "dominic.wrege001@stud.fh-dortmund.de"
 		}
 	}
 }
