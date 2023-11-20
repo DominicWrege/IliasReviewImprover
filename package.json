@@ -1,6 +1,6 @@
 {
 	"name": "ilias-review-improver",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "Simple Ilias Review Improver",
 	"main": "main.ts",
 	"author": "Dominic Wrege",
@@ -10,7 +10,7 @@
 	},
 	"scripts": {
 		"start": "bun run build:bun && web-ext run -c config.js",
-		"build": "bun run build:bun && web-ext lint -c config.js && web-ext build -c config.js -o",
+		"build": "bun run build:bun && web-ext build -c config.js -o",
 		"lint": "web-ext lint -c config.js",
 		"docs": "web-ext doc",
 		"build:bun": "bun build ./src/main.ts --minify --outfile=./dist/main.bundle.js",
