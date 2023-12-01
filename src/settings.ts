@@ -1,6 +1,6 @@
-
 const slider: HTMLInputElement | null = document.querySelector("#width-slider");
-const valueLabel: HTMLDivElement | null = document.querySelector("#value-slider-text");
+const valueLabel: HTMLDivElement | null =
+	document.querySelector("#value-slider-text");
 
 if (slider && valueLabel) {
 	const unit = "rem";
@@ -27,8 +27,19 @@ function saveWidthSettings(width: string): void {
 }
 
 export async function load(): Promise<number> {
-	const defaultWidth = 40;
+	const version = "1.5";
+	// @ts-ignore
+	chrome.storage.local.set({ version });
+	const defaultWidth = 31;
 	return new Promise((resolve, _reject) => {
+		// @ts-ignore
+		chrome.storage.local.get(["version"], (result: any) => {
+			if (result !== version) {
+				// @ts-ignore
+				chrome.storage.local.set({ version: defaultWidth });
+			}
+		});
+
 		// @ts-ignore
 		chrome.storage.local.get(["width"], (result: any) => {
 			resolve(result.width ?? defaultWidth);

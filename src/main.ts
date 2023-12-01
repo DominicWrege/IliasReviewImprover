@@ -19,7 +19,6 @@ function main(): void {
 		if (tableBar && tableIsNotEmpty()) {
 			// setupExportButtons();
 			tableBar.append(fixButton());
-			tableBar.append(loadingText());
 		}
 	}
 }
@@ -37,6 +36,7 @@ function getTableBar(): Element | null {
 }
 
 async function fixAllAnswers(widthStyle: string) {
+	customAlert("⏳ Bitte warten ... ", 4000);
 	let links = document.querySelectorAll(
 		"td.std > a.il_ContainerItemCommand[data-answer-href]"
 	);
@@ -51,15 +51,11 @@ async function fixAllAnswers(widthStyle: string) {
 	if (promises.length > 0) {
 		try {
 			await Promise.all(promises);
-		} catch (err) {
+			customAlert("Antworten wurden geladen 🚀", 1700);
+		} catch (err: any) {
 			console.error("error:", err);
+			customAlert(err?.message, 4000);
 		}
-		const loadingDiv = document.querySelector(
-			"div#loadingText"
-		) as HTMLElement | null;
-
-		loadingDiv?.parentElement?.append(checkBoxFont());
-		loadingDiv?.remove();
 	}
 }
 
@@ -67,11 +63,6 @@ async function handlerFixAnswers(event: Event): Promise<void> {
 	event.preventDefault();
 	event.stopPropagation();
 
-	const loadingDiv: HTMLButtonElement | null =
-		document.querySelector("div#loadingText");
-	if (loadingDiv) {
-		loadingDiv.style.display = "inline-block";
-	}
 	document.querySelector("input#ImproveReview")?.remove();
 	// settings.js
 	await fixAllAnswers(`${await settings.load()}rem`);
@@ -87,7 +78,7 @@ function loadingText(): HTMLDivElement {
 		loading.style.marginLeft = "12px";
 	}
 	loading.id = "loadingText";
-	loading.textContent = "loading...";
+	loading.textContent = "Bitte warten...";
 	return loading;
 }
 
@@ -163,7 +154,14 @@ async function replaceAnswerShowQuestion(
 		return;
 	}
 	// util.js
-	const parsedResponse = parseAnswer(await downloadAnswer(linkElement));
+	const bodyText = await downloadAnswer(linkElement);
+	const tr = linkElement.parentElement?.parentElement;
+
+	const parsedResponse = parseAnswer(bodyText);
+	if (parsedResponse.html && tr) {
+		addRatingInput(parsedResponse.html, tr);
+	}
+
 	if (parsedResponse.answer) {
 		linkElement?.parentElement?.replaceChild(
 			createAnswerDiv(parsedResponse.answer, widthStyle),
@@ -175,6 +173,117 @@ async function replaceAnswerShowQuestion(
 	if (!questionIntoTitleInserted) {
 		insertQuestionIntoTitle(parsedResponse.html);
 	}
+}
+
+function beforeUnloadListener(e: any) {
+	e.returnValue = null;
+}
+
+function addRatingInput(doc: Document, tr: HTMLElement): void {
+	const modalForm = doc?.querySelector("form#form_") as HTMLFormElement;
+
+	const scoreTd = tr.querySelector(
+		'[class^="reached_points"]'
+	) satisfies HTMLElement | null;
+
+	if (!scoreTd || !modalForm) {
+		return;
+	}
+
+	const selectorsHide = [
+		"textarea.form-control",
+		"div.checkbox",
+		"div.ilFormHeader",
+		"div.ilFormFooter",
+		"div.form-group",
+	];
+
+	const form = modalForm.cloneNode(true) as HTMLFormElement;
+
+	for (const item of selectorsHide) {
+		const element = form.querySelector(item) as HTMLElement | null;
+		if (!element) {
+			continue;
+		}
+		element.style.display = "none";
+	}
+
+	form
+		.querySelectorAll("label")
+		.forEach((item: HTMLElement) => (item.style.display = "none"));
+
+	scoreTd.innerHTML = "";
+	scoreTd.appendChild(form);
+
+	form.addEventListener("submit", async (event) => {
+		event.preventDefault();
+
+		const actionUrl = new URL(form.action);
+		const actionQueryParams = new URLSearchParams(actionUrl.search);
+
+		const queryParams = new URLSearchParams({
+			ref_id: actionQueryParams.get("ref_id")!,
+			cmd: "checkConstraintsBeforeSaving",
+			cmdClass: "iltestscoringbyquestionsgui",
+			cmdNode: actionQueryParams.get("cmdNode")!,
+			baseClass: "ilRepositoryGUI",
+			cmdMode: "asynch",
+		});
+
+		const url = `${location.origin}${
+			location.pathname
+		}?${queryParams.toString()}`;
+
+		try {
+			const response = await fetch(url, {
+				body: new FormData(form),
+				method: "post",
+			});
+
+			if (response?.ok) {
+				customAlert("✅ Gespeichert!");
+			}
+		} finally {
+			window.removeEventListener("beforeunload", beforeUnloadListener);
+		}
+	});
+}
+
+function customAlert(message: string, time = 2000): void {
+	const existingAlert = document.querySelector(".custom-alert");
+	if (existingAlert) {
+		document.body.removeChild(existingAlert);
+	}
+	const alertContainer = document.createElement("div");
+	alertContainer.textContent = message;
+
+	alertContainer.className = "custom-alert";
+	Object.assign(alertContainer.style, {
+		position: "fixed",
+		top: "2em",
+		left: "50%",
+		transform: "translateX(-50%)",
+		backgroundColor: "#f0f0f0",
+		color: "#000",
+		padding: "10px",
+		borderRadius: "5px",
+		boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+		zIndex: "9999",
+		transition: "opacity 0.3s ease-in-out",
+		opacity: "0",
+	});
+
+	document.body.appendChild(alertContainer);
+	alertContainer.offsetHeight;
+	alertContainer.style.opacity = "1";
+	setTimeout(() => {
+		// Set opacity to 0 to initiate the fade-out transition
+		alertContainer.style.opacity = "0";
+	}, time - 250); //
+
+	setTimeout(() => {
+		document.body.removeChild(alertContainer);
+	}, time); // Remove the al
 }
 
 function checkBoxFont(): HTMLDivElement {
