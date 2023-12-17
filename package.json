@@ -6,7 +6,7 @@
 	"author": "Dominic Wrege",
 	"license": "MIT",
 	"devDependencies": {
-		"web-ext": "^7.8.0"
+		"web-ext": "^7.9.0"
 	},
 	"scripts": {
 		"start": "bun run build:bun && web-ext run -c config.js",
