@@ -1,6 +1,6 @@
 {
 	"name": "ilias-review-improver",
-	"version": "1.5.0",
+	"version": "1.6.0",
 	"description": "Simple Ilias Review Improver",
 	"main": "main.ts",
 	"author": "Dominic Wrege",
@@ -15,7 +15,7 @@
 		"docs": "web-ext doc",
 		"build:bun": "bun build ./src/main.ts --minify --outfile=./dist/main.bundle.js",
 		"ext": "web-ext",
-		"watch": "bun build ./src/main.ts --outdir ./dist --watch"
+		"watch": "bun build ./src/main.ts --watch --outfile=./dist/main.bundle.js"
 	},
 	"packageManager": "bun",
 	"webExt": {

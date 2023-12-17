@@ -17,7 +17,6 @@ function main(): void {
 	if (tabActive) {
 		const tableBar = getTableBar();
 		if (tableBar && tableIsNotEmpty()) {
-			// setupExportButtons();
 			tableBar.append(fixButton());
 		}
 	}
@@ -51,6 +50,8 @@ async function fixAllAnswers(widthStyle: string) {
 	if (promises.length > 0) {
 		try {
 			await Promise.all(promises);
+			const tableBar = getTableBar();
+			tableBar?.append(checkBoxFont());
 			customAlert("Antworten wurden geladen 🚀", 1700);
 		} catch (err: any) {
 			console.error("error:", err);
@@ -66,20 +67,6 @@ async function handlerFixAnswers(event: Event): Promise<void> {
 	document.querySelector("input#ImproveReview")?.remove();
 	// settings.js
 	await fixAllAnswers(`${await settings.load()}rem`);
-}
-
-function loadingText(): HTMLDivElement {
-	const loading: HTMLDivElement | null = document.createElement("div");
-	if (loading) {
-		loading.style.display = "none";
-		loading.style.marginRight = "3em";
-		loading.style.marginBottom = "1.25em";
-		loading.style.fontWeight = "bold";
-		loading.style.marginLeft = "12px";
-	}
-	loading.id = "loadingText";
-	loading.textContent = "Bitte warten...";
-	return loading;
 }
 
 function fixButton(): HTMLInputElement {
@@ -114,7 +101,6 @@ function createAnswerDiv(
 	div.style.padding = "0";
 	div.style.background = "#FFF !important";
 	answer.style.border = "none";
-	// div.style.maxWidth = "700px !important";
 	answer.style.color = "black";
 	div.appendChild(answer);
 	return div;
@@ -153,7 +139,6 @@ async function replaceAnswerShowQuestion(
 	if (!linkElement) {
 		return;
 	}
-	// util.js
 	const bodyText = await downloadAnswer(linkElement);
 	const tr = linkElement.parentElement?.parentElement;
 
@@ -193,12 +178,16 @@ function addRatingInput(doc: Document, tr: HTMLElement): void {
 	const selectorsHide = [
 		"textarea.form-control",
 		"div.checkbox",
+		"[id^='il_prop_cont_m_feedback']",
 		"div.ilFormHeader",
 		"div.ilFormFooter",
-		"div.form-group",
 	];
 
 	const form = modalForm.cloneNode(true) as HTMLFormElement;
+
+	form.querySelector<HTMLElement>("div.form-horizontal")!.style.marginBottom =
+		"8px";
+	fixFeedbackTextarea(form, scoreTd);
 
 	for (const item of selectorsHide) {
 		const element = form.querySelector(item) as HTMLElement | null;
@@ -217,6 +206,15 @@ function addRatingInput(doc: Document, tr: HTMLElement): void {
 
 	form.addEventListener("submit", async (event) => {
 		event.preventDefault();
+
+		const manuelTextFieldClone = getFeedbackTd(scoreTd)?.querySelector(
+			"textarea"
+		) as HTMLTextAreaElement | null;
+		const manuelTextField = getFeedbackTextarea(form);
+
+		if (manuelTextField && manuelTextFieldClone) {
+			manuelTextField.value = manuelTextFieldClone.value ?? "";
+		}
 
 		const actionUrl = new URL(form.action);
 		const actionQueryParams = new URLSearchParams(actionUrl.search);
@@ -249,10 +247,50 @@ function addRatingInput(doc: Document, tr: HTMLElement): void {
 	});
 }
 
+function getFeedbackTd(parent: HTMLElement): HTMLElement | null {
+	return parent.nextElementSibling?.nextElementSibling as HTMLElement;
+}
+
+function getFeedbackTextarea(
+	form: HTMLFormElement
+): HTMLTextAreaElement | null {
+	return form.querySelector("textarea.form-control");
+}
+
+function fixFeedbackTextarea(form: HTMLFormElement, scoreTd: HTMLElement) {
+	const feedback = getFeedbackTextarea(form);
+	if (!feedback || !scoreTd) {
+		return;
+	}
+	const feedbackTextarea = feedback.cloneNode(true) as HTMLTextAreaElement;
+	feedbackTextarea.value = feedback.value;
+	feedbackTextarea.rows = 4;
+	feedbackTextarea.style.width = "93%";
+	feedbackTextarea.onkeyup = (e: Event) => {
+		e.preventDefault();
+	};
+	feedbackTextarea.removeAttribute("onkeyup");
+	const feedbackColumn = getFeedbackTd(scoreTd);
+	const oldManuelP = feedbackColumn?.firstChild;
+	if (oldManuelP) {
+		feedbackColumn?.replaceChild(feedbackTextarea, oldManuelP);
+	} else {
+		feedbackColumn?.appendChild(feedbackTextarea);
+	}
+	const submitButton = form
+		.querySelector("input[type='submit']")
+		?.cloneNode(true) as HTMLElement | null;
+	if (submitButton) {
+		submitButton.style.marginTop = "8px";
+		submitButton.setAttribute("form", form.id);
+		feedbackColumn?.appendChild(submitButton);
+	}
+}
+
 function customAlert(message: string, time = 2000): void {
-	const existingAlert = document.querySelector(".custom-alert");
+	const existingAlert = document.body.querySelector(".custom-alert");
 	if (existingAlert) {
-		document.body.removeChild(existingAlert);
+		existingAlert.remove();
 	}
 	const alertContainer = document.createElement("div");
 	alertContainer.textContent = message;
@@ -282,7 +320,10 @@ function customAlert(message: string, time = 2000): void {
 	}, time - 250); //
 
 	setTimeout(() => {
-		document.body.removeChild(alertContainer);
+		const existingAlert = document.body.querySelector(".custom-alert");
+		if (existingAlert) {
+			existingAlert.remove();
+		}
 	}, time); // Remove the al
 }
 
