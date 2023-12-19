@@ -168,27 +168,30 @@ function addRatingInput(doc: Document, tr: HTMLElement): void {
 	const modalForm = doc?.querySelector("form#form_") as HTMLFormElement;
 
 	const scoreTd = tr.querySelector(
-		'[class^="reached_points"]'
+		'td[class^="reached_points"]'
 	) satisfies HTMLElement | null;
 
 	if (!scoreTd || !modalForm) {
 		return;
 	}
 
-	const selectorsHide = [
-		"textarea.form-control",
-		"div.checkbox",
-		"[id^='il_prop_cont_m_feedback']",
-		"div.ilFormHeader",
-		"div.ilFormFooter",
-	];
-
 	const form = modalForm.cloneNode(true) as HTMLFormElement;
 
 	form.querySelector<HTMLElement>("div.form-horizontal")!.style.marginBottom =
 		"8px";
-	fixFeedbackTextarea(form, scoreTd);
 
+	const feedbackColumn = tr.querySelector(
+		'td[class^="feedback_"]'
+	) as HTMLElement | null;
+	fixFeedbackTextarea(form, feedbackColumn);
+
+	const selectorsHide = [
+		"textarea.form-control",
+		"[id^='il_prop_cont_m_feedback']",
+		"div.ilFormHeader",
+		".control-label",
+		"div.ilFormFooter",
+	];
 	for (const item of selectorsHide) {
 		const element = form.querySelector(item) as HTMLElement | null;
 		if (!element) {
@@ -196,19 +199,47 @@ function addRatingInput(doc: Document, tr: HTMLElement): void {
 		}
 		element.style.display = "none";
 	}
-
 	form
-		.querySelectorAll("label")
-		.forEach((item: HTMLElement) => (item.style.display = "none"));
+		.querySelectorAll("label.col-sm-3.control-label")
+		.forEach((item: any) => (item.style.display = "none"));
+
+	const label = form.querySelector(
+		"[id^='il_prop_cont_evaluated'] > label.control-label"
+	) as HTMLElement;
+
+	const labelContainer = label.parentElement;
+
+	if (labelContainer) {
+		setStyle(labelContainer, {
+			display: "flex",
+			margin: "-10px 0 0 -10px",
+			padding: 0,
+		});
+	}
 
 	scoreTd.innerHTML = "";
 	scoreTd.appendChild(form);
 
+	if (label) {
+		label.textContent = "Bewertung:";
+		setStyle(label, {
+			display: "block",
+			flexGrow: 1,
+			padding: 0,
+			width: "115px",
+			fontSize: "85%",
+			paddingTop: "6px",
+		});
+		const checkbox = labelContainer?.querySelector(
+			"input[type='checkbox']"
+		) as HTMLElement | null;
+		setStyle(checkbox, { width: "16px", height: "16px" });
+	}
+
 	form.addEventListener("submit", async (event) => {
 		event.preventDefault();
-
-		const manuelTextFieldClone = getFeedbackTd(scoreTd)?.querySelector(
-			"textarea"
+		const manuelTextFieldClone = feedbackColumn?.querySelector(
+			"textarea.form-control"
 		) as HTMLTextAreaElement | null;
 		const manuelTextField = getFeedbackTextarea(form);
 
@@ -247,36 +278,33 @@ function addRatingInput(doc: Document, tr: HTMLElement): void {
 	});
 }
 
-function getFeedbackTd(parent: HTMLElement): HTMLElement | null {
-	return parent.nextElementSibling?.nextElementSibling as HTMLElement;
-}
-
 function getFeedbackTextarea(
 	form: HTMLFormElement
-): HTMLTextAreaElement | null {
-	return form.querySelector("textarea.form-control");
+): HTMLTextAreaElement | HTMLInputElement | null {
+	let element = form.querySelector("textarea.form-control");
+	if (!element) {
+		element = form.querySelector("input#qst_hidden_feedback_name");
+	}
+	return element as HTMLTextAreaElement | HTMLInputElement | null;
 }
 
-function fixFeedbackTextarea(form: HTMLFormElement, scoreTd: HTMLElement) {
-	const feedback = getFeedbackTextarea(form);
-	if (!feedback || !scoreTd) {
+function fixFeedbackTextarea(
+	form: HTMLFormElement,
+	feedbackColumn: HTMLElement | null
+) {
+	if (!feedbackColumn) {
 		return;
 	}
-	const feedbackTextarea = feedback.cloneNode(true) as HTMLTextAreaElement;
-	feedbackTextarea.value = feedback.value;
-	feedbackTextarea.rows = 4;
-	feedbackTextarea.style.width = "93%";
-	feedbackTextarea.onkeyup = (e: Event) => {
-		e.preventDefault();
-	};
-	feedbackTextarea.removeAttribute("onkeyup");
-	const feedbackColumn = getFeedbackTd(scoreTd);
-	const oldManuelP = feedbackColumn?.firstChild;
-	if (oldManuelP) {
-		feedbackColumn?.replaceChild(feedbackTextarea, oldManuelP);
-	} else {
-		feedbackColumn?.appendChild(feedbackTextarea);
-	}
+	const feedbackTextareaClone = document.createElement(
+		"textarea"
+	) as HTMLTextAreaElement;
+	feedbackTextareaClone.value = feedbackColumn.textContent?.trim() ?? "";
+	feedbackTextareaClone.rows = 3;
+	feedbackTextareaClone.classList.add("form-control", "noRTEditor");
+	feedbackTextareaClone.style.width = "95%";
+	feedbackColumn.innerHTML = "";
+	feedbackColumn.appendChild(feedbackTextareaClone);
+
 	const submitButton = form
 		.querySelector("input[type='submit']")
 		?.cloneNode(true) as HTMLElement | null;
@@ -296,7 +324,8 @@ function customAlert(message: string, time = 2000): void {
 	alertContainer.textContent = message;
 
 	alertContainer.className = "custom-alert";
-	Object.assign(alertContainer.style, {
+
+	setStyle(alertContainer, {
 		position: "fixed",
 		top: "2em",
 		left: "50%",
@@ -394,4 +423,11 @@ function createBlueButton(text: string): HTMLInputElement {
 	button.value = text;
 	button.style.marginLeft = "0.35em";
 	return button;
+}
+
+function setStyle(element: HTMLElement | null, style: object): void {
+	if (!element) {
+		return;
+	}
+	Object.assign(element.style, style);
 }
